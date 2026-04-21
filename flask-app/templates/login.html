@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src= "../static/js/master.js"></script>
+    <link rel="stylesheet" href="../static/master.css">
+    <title>Drawing app</title>
+</head>
+<body>
+    <div class = background>
+        <div class = login-header>
+            Online Drawing App
+        </div>
+        <div class = login-container>
+            <table class = "login-handler">
+                <tr>
+                    
+                    <td>
+                        <label class="login-info">Username: </label>
+                        <input type = "text" class="login-info" id = "username">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="login-info">Password: </label>
+                        <input type = "text" class="login-info" id = "password">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class = "login-info" id = "login-button" href = "{{url_for('home')}}" > Login</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
