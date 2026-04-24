@@ -27,6 +27,9 @@ def profile():
 def saved():
     return render_template("saved.html");
 
+@app.route('/settings/')
+def settings():
+    return render_template('saved.html')
 
 
 if __name__ == "__main__":

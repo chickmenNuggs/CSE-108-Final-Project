@@ -9,20 +9,29 @@
 </head>
 <body>
     <div class = background>
-        <!-- <div class = nav-bar>
-            <a class = "nav-button" id = "profile-button"> Profile</a>            
-        </div> -->
         <div class = menu>
             <div class = vert-bar>
-                <a class = "vert-button">Illustrate</a>
-                <a class = "vert-button">Draw with a friend</a>
-                <a class = "vert-button">Saved Drawings</a>
-                <a class = "vert-button">Settings</a>
-                <a class = "vert-button">Profile</a>
+                <a class = "vert-button" href="{{url_for('canvas')}}">Illustrate</a>
+                <a class = "vert-button" href="{{url_for('lobby')}}">Draw with a friend</a>
+                <a class = "vert-button" href="{{url_for('saved')}}">Saved Drawings</a>
+                <a class = "vert-button" href="{{url_for('settings')}}">Settings</a>
+                <a class = "vert-button" href="{{url_for('profile')}}">Profile</a>
             </div>
             <div class = instruction>
                 <p>
-                    
+                    Illustrate : Free Draw on a web-canvas
+                </p>
+                <p>
+                    Draw with a friend : Redirect to a lobby page, where you can matchmake with a friend to draw together (Log-in Required)
+                </p>
+                <p>
+                    Saved Drawings : Browse Illustrations you have saved (Log-in Required)
+                </p>
+                <p>
+                    Settings : Manage Site Settings (Log-in Required)
+                </p>
+                <p>
+                    Profile : Manage Profile (Log-in Required)
                 </p>
             </div>
         </div>
