@@ -3,9 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src= "../static/js/master.js"></script>
+    <link rel="stylesheet" href="../static/master.css">
     <title>Document</title>
 </head>
 <body>
-    canvas
+    <div class = background>
+        <div class = container>
+            <div class = action-bar>
+                <a class="action-buttons">File</a>
+                <a class="action-buttons">Edit</a>
+                <a class="action-buttons">Home</a>
+                <a class="action-buttons"></a>
+                <a class="action-buttons">File</a>
+            </div>
+            <div class = "wide-div">
+                <div class = tool-bar>
+                    <div class="color-selector">
+                        
+                    </div>
+                    <div class = selected-color>
+                        <label for ="selected-color"> Hex :</label>
+                        <input id = "selected-color" type = "text" value = "#000000"> 
+                    </div>
+                    
+                    
+                </div>
+                <div class = canvas-holder>
+                    <div class = create-new></div>       
+                    <canvas id="myCanvas"></canvas>
+               </div>
+               <div class = manipulator>
+   
+               </div>
+            </div>
+        </div>
+        
+    </div>
 </body>
 </html>

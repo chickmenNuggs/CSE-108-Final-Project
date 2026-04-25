@@ -4,7 +4,7 @@
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .background{
-    background-color: #5a5859;
+    background-color: #555555;
     display: flex;
     width: 100%;
     height: 100vh;
@@ -45,7 +45,6 @@
 .login-handler tr{
     background-color: #b00b5b;
 }
-
 .login-handler td{
     text-align: center;
 }
@@ -81,18 +80,33 @@
     display: flex;
     flex-direction: row;
     background-color: #b00b5b;
-    height: 6%;
+    height: 9%;
     padding-left: 10px;
     overflow: hidden;
     width: 99.5%;
 
 }
 .nav-button{
-    background-color: #ce1b71;
+    background-color: #e4ac63;
     width: 8%;
-    height: 100%;
+    height: 50px;
     font-size: larger;
     text-align: center;    
+    border: 5px #c78f47 solid ;
+    border-radius: 10px;
+    margin: 5px;
+    color: #ce1b71;
+    display: flex;
+    justify-content: center;
+    align-items: center;     /* Vertically centers */
+}
+.nav-button:hover{
+    background-color: #ffc478;
+    border-color: #e4ac63;
+}
+#nav-active{
+    background-color: #ffc478;
+    border-color: #e4ac63;
 }
 .menu{
     background-color: #921b54;
@@ -127,6 +141,9 @@
     font-size: x-large;
     text-decoration: none;
     color: #ce1b71;
+    display: flex;
+    justify-content: center;
+    align-items: center;     /* Vertically centers */
     /* text-align: center; */
 }
 .vert-button:hover {
@@ -151,4 +168,75 @@
     font-size: larger;    
     font-weight: bold;
     color: #ffc478;    
+}
+.container{
+    background-color: teal;
+    width: 99%;
+    height: 99%;
+}
+.action-bar{
+    width: 99.75%;
+    height: 4vh;
+    background-color: #555555;
+    border: 2px solid #312515;
+}
+.wide-div{
+    width: 100%;
+    height: 96%;
+    display: flex;
+    flex-direction: row;
+}
+.tool-bar{
+    width: 15%;
+    height: 99.3%;
+    border: #312515 solid 2px;
+    border-top: 0px;
+    background-color: #555555;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.color-selector{
+    background-color: #727272;
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+.selected-color{
+    width: 96%;
+    padding: 2%;
+    background-color: #727272;
+    border-bottom: #312515 2px solid;
+    border-top: #555555 2px dashed;
+    display: flex;
+}
+#selected-color{
+    margin-left: 5px;
+    width: 6vh;
+}
+
+.canvas-holder{
+    background-color: #494848;
+    width: 66%;
+    height: 99.3%;
+    border-bottom: #312515 solid 2px;
+    display: flex;
+}
+#myCanvas{
+    background-color: white;
+    border-bottom: #312515 solid 2px;
+    width: 10%;
+    height: 10%;
+
+}
+.info{
+    background-color: #c78f47;
+    width: 50%;
+    height: 50%;
+}
+.manipulator{
+    width: 20%;
+    height: 99.3%;
+    border: #312515 solid 2px;
+    border-top: 0px;
+    background-color: #555555;
 }
