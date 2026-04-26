@@ -37,6 +37,7 @@
     align-items: center;
 }
 .login-handler{
+    margin: auto;
     margin-top: 5%;
     height: 80%;
     width: 80%;
@@ -44,9 +45,11 @@
 }
 .login-handler tr{
     background-color: #b00b5b;
+    
 }
 .login-handler td{
     text-align: center;
+    padding: 10px;
 }
 .login-info{   
     text-align: center;
@@ -87,9 +90,15 @@
 
 }
 .nav-button{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    text-align: center;
+
     background-color: #e4ac63;
     width: 8%;
-    height: 50px;
+    height: 40px;
     font-size: larger;
     text-align: center;    
     border: 5px #c78f47 solid ;
@@ -104,7 +113,7 @@
     background-color: #ffc478;
     border-color: #e4ac63;
 }
-#nav-active{
+.nav-active{
     background-color: #ffc478;
     border-color: #e4ac63;
 }
@@ -179,6 +188,19 @@
     height: 4vh;
     background-color: #555555;
     border: 2px solid #312515;
+    display: flex;
+    flex-direction: row;
+}
+.action-buttons{
+    height: 100%;
+    width: 4%;
+    display: flex;
+    font-size: larger;
+    text-decoration: underline;
+    color: #ffffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 .wide-div{
     width: 100%;
@@ -228,7 +250,7 @@
     height: 10%;
 
 }
-.info{
+.create-new{
     background-color: #c78f47;
     width: 50%;
     height: 50%;
@@ -240,3 +262,44 @@
     border-top: 0px;
     background-color: #555555;
 }
+
+form{
+    margin: inherit;
+    padding: 0;
+    margin-bottom: 0;
+}
+.lobby-menu{
+    background-color: #921b54;
+    width: 70%;
+    height: 85vh;
+    border: 10px solid #861149;
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-bottom: 45px;
+    display: flex;
+    flex-direction: column;
+}
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+.info p {
+    color: #ffc478;
+    font-size: x-large;
+    margin: 20px;
+}
+.bumblelings{
+    margin-top: 20%;
+}
+
+.create-lobby{
+    margin: auto;
+}
+
+
+
+
+.hidden{ display: none;}

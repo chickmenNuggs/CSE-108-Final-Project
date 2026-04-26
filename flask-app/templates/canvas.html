@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src= "../static/js/master.js"></script>
+    <script src= "../static/master.js"></script>
     <link rel="stylesheet" href="../static/master.css">
     <title>Document</title>
 </head>
@@ -13,9 +13,8 @@
             <div class = action-bar>
                 <a class="action-buttons">File</a>
                 <a class="action-buttons">Edit</a>
-                <a class="action-buttons">Home</a>
-                <a class="action-buttons"></a>
-                <a class="action-buttons">File</a>
+                <a class="action-buttons" href="{{url_for('home')}}">Home</a>
+
             </div>
             <div class = "wide-div">
                 <div class = tool-bar>
@@ -26,15 +25,61 @@
                         <label for ="selected-color"> Hex :</label>
                         <input id = "selected-color" type = "text" value = "#000000"> 
                     </div>
-                    
-                    
+                    <div class = brush-settings>
+                        <div class="brush-size">
+                            <input type="range" value="10" id = brush-range oninput="syncBrushSize('brush-range', 'brush-num')">
+                            <input type="number" id = brush-num min="1" max="100" step="1" value="10" oninput="syncBrushSize('brush-num', 'brush-range')">
+                        </div>
+                        <div class="brush-shape">
+                            <div>
+                                <button>
+                                    Brush
+                                </button>
+                            </div>
+                            <div>
+                                <button>
+                                    Circle
+                                </button>
+                                <input type="checkbox" id = "hollow-circle">
+                            </div>
+                            <div>
+                                <button>
+                                    Square
+                                </button>
+                                <input type="checkbox" id = "hollow-circle">
+                            </div>
+                            <div>
+                                <button>
+                                    Triangle
+                                </button>
+                                <input type="checkbox" id = "hollow-circle">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class = canvas-holder>
-                    <div class = create-new></div>       
-                    <canvas id="myCanvas"></canvas>
+                    <div class = "create-new">
+
+                        <label for="width">Width : </label>
+                        <input id="width">
+                        <label for="height">height : </label>
+                        <input id="height">
+
+                        <button> Swap Width and Height</button>
+                        
+                    </div>       
+                    <canvas id="myCanvas" class = "hidden"></canvas>
                </div>
                <div class = manipulator>
-   
+                    <div class = 'view-finder'>
+                        Navigator
+                    </div>
+                    <div class="roster">
+                        Player1    
+                    </div>
+                    <div class = 'layer'>
+
+                    </div>
                </div>
             </div>
         </div>
