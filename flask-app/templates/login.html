@@ -13,26 +13,32 @@
             Online Drawing App
         </div>
         <div class = login-container>
+            <form action="{{ url_for('login_post') }}" method="POST">
             <table class = "login-handler">
                 <tr>
-                    
                     <td>
                         <label class="login-info">Username: </label>
-                        <input type = "text" class="login-info" id = "username">
+                        <input type = "text" class="login-info" id = "username" name = "username">
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <label class="login-info">Password: </label>
-                        <input type = "text" class="login-info" id = "password">
+                        <input type = "password" class="login-info" id = "password" name = "password">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <a class = "login-info" id = "login-button" href = "{{url_for('home')}}" > Login</a>
+                        <input type = "submit" class = "login-info" id = "login-button" value = "Login">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="{{ url_for('signup') }}" class = "login-info" id = "signup-link">Don't have an account? Sign up here.</a>
                     </td>
                 </tr>
             </table>
+            </form>
         </div>
     </div>
 </body>
