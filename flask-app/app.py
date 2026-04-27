@@ -1,27 +1,24 @@
 from flask import Flask, redirect, render_template, request, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_required, login_user
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, login_required
 
+# Custom user python file
+from User import GetUser, TryToRegister, LoggedInSucessfully
+
+from database import db
 
 app = Flask(__name__);
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 app.config["SECRET_KEY"] = "your_secret_key"
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+def load_user(id):
+    return GetUser(id)
 
 @app.route("/")
 def login():
@@ -36,10 +33,7 @@ def login_post():
     username = request.form.get("username")
     password = request.form.get("password")
 
-    user = User.query.filter_by(username=username).first()
-
-    if user and check_password_hash(user.password, password):
-        login_user(user)
+    if LoggedInSucessfully(username, password):
         return redirect(url_for("home"))
 
     return "Invalid login"
@@ -49,15 +43,10 @@ def register():
     username = request.form.get("username")
     password = request.form.get("password")
 
-    existing_user = User.query.filter_by(username=username).first()
-    if existing_user:
-        return "Username already exists"
+    userExists, existingUserErrorMessage = TryToRegister(username, password)
 
-    hashed_password = generate_password_hash(password)
-
-    new_user = User(username=username, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
+    if userExists:
+        return existingUserErrorMessage
 
     return redirect(url_for("login"))
 
