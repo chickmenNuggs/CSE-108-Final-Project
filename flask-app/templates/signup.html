@@ -8,15 +8,35 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>Sign Up</h2>
+    <div class = background>
+        <div class = login-header>
+            Sign Up
     
-    <form action="{{ url_for('register') }}" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <br><br>
-        <input type="password" name="password" placeholder="Password" required>
-        <br><br>
-        <button type="submit">Create Account</button>
-    </form>
+        </div>
+        <div class = login-container>
+            
+            <form action="{{ url_for('register') }}" method="POST">
+            <table class = "login-handler">
+                <tr>
+                    <td>
+                        <label class="login-info">Username: </label>
+                        <input type="text" class="login-info" name="username" id = "username" placeholder="Enter Here" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="login-info">Password: </label>
+                        <input type="password" class="login-info" name="password" id = "password" placeholder="Enter Here" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="login-info" id = "login-button">Create Account</button>
+                    </td>
+                </tr>
+            </form>
+        </div>
+    </div>
     
 </body>
 </html>
