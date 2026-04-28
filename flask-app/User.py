@@ -32,11 +32,11 @@ def TryToRegister(username, password):
    user = GetUserFromName(username)
 
    if user:
-      return (False, "Username already exists")
+      return (True, "Username already exists")
 
    hashedPassowrd = generate_password_hash(password)
    registeredUser = User(username=username, password=hashedPassowrd)
    db.session.add(registeredUser)
    db.session.commit()
 
-   return (True, "Success")
+   return (False, "")
