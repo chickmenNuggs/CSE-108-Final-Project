@@ -1,42 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src= "../static/master.js"></script>
-    <link rel="stylesheet" href="../static/master.css">
-    <title>Document</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <div id="app" data-username="{{ username }}"></div>
+   <title>Document</title>
 </head>
+
 <body>
-    <div class = background>
-        <div class = lobby-menu>
-            <div class="nav-bar">
-                <a class = "nav-button" href="{{url_for('home')}}"> Home</a>
-                <a class = "nav-button nav-active" id = info onclick="toggleHiddenLobby('info','create-lobby','join-lobby')">Information</a>
-                <a class = "nav-button" id = create-lobby onclick="toggleHiddenLobby('create-lobby','info','join-lobby')">Create a Lobby</a>
-                <a class = "nav-button" id = join-lobby onclick="toggleHiddenLobby('join-lobby','create-lobby', 'info')">Join a Lobby</a>
+   <div class=background>
+      <div class=lobby-menu>
+         <div class="nav-bar">
+            <a class="nav-button" href="{{url_for('home')}}"> Home</a>
+            <a class="nav-button nav-active" id="info">Information</a>
+            <a class="nav-button" id="create-lobby">Create a Lobby</a>
+            <a class="nav-button" id="join-lobby">Join a Lobby</a>
+         </div>
+         <div class=info onclick="">
+            <div class="bumblelings">
+               <p>{{username}}adsad</p>
+               <p>
+                  You can create a lobby to join a friend or join a friend.
+               </p>
+               <p>
+                  To do so, click "Create Lobby", then enter in your desired Lobby Name and Password.
+               </p>
+               <p>
+                  To join a friend, click "Join a Lobby" and ask them for the Lobby Name and Password
+               </p>
             </div>
-            <div class = info onclick="">
-                <div class = "bumblelings">
-                    <p>
-                        You can create a lobby to join a friend or join a friend. 
-                    </p>
-                    <p>
-                        To do so, click "Create Lobby", then enter in your desired Lobby Name and Password.
-                    </p>
-                    <p>
-                        To join a friend, click "Join a Lobby" and ask them for the Lobby Name and Password
-                    </p>
-                </div>
-            </div>
-            <div class = "create-lobby  hidden" >
-                
-                Create Lobby
-            </div>
-            <div class = "join-lobby hidden" >
-                Enter Lobby Code
-            </div>
-        </div>
-    </div>
+         </div>
+         <div class="create-lobby  hidden">
+            <input name="LobbyName" id="LobbyName" placeholder="Lobby Name">
+            <button id="CreateLobby">Create Lobby</button>
+         </div>
+         <div class="join-lobby hidden">
+            <span>Lobby List</span>
+            </span>
+         </div>
+      </div>
+   </div>
+   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+   <script src="../static/Client.js"></script>
+   <script src="../static/Lobby.js"></script>
+   <link rel="stylesheet" href="../static/master.css">
 </body>
+
 </html>

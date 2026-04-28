@@ -1,6 +1,6 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, session
 from flask_login import LoginManager, login_required
-
+from server import socketio
 # Custom user python file
 from User import GetUser, TryToRegister, LoggedInSucessfully
 
@@ -11,6 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 app.config["SECRET_KEY"] = "your_secret_key"
 
 db.init_app(app)
+socketio.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -34,6 +35,7 @@ def login_post():
     password = request.form.get("password")
 
     if LoggedInSucessfully(username, password):
+        session["user"] = username
         return redirect(url_for("home"))
 
     return "Invalid login"
@@ -53,7 +55,7 @@ def register():
 @app.route("/home/")
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html",)
 
 @app.route("/canvas/")
 @login_required
@@ -63,7 +65,7 @@ def canvas():
 @app.route("/lobby/")
 @login_required
 def lobby():
-    return render_template("lobby.html")
+    return render_template("lobby.html", username = session["user"])
 
 @app.route("/profile/")
 @login_required
@@ -83,6 +85,8 @@ def settings():
 with app.app_context():
     db.create_all()
 
+
 if __name__ == "__main__":
     print("[}----------- [Running app.py] ---------------{]")
+    socketio.run(app);
     app.run(debug=True);
