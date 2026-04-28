@@ -38,3 +38,5 @@ def TryToRegister(username, password):
    registeredUser = User(username=username, password=hashedPassowrd)
    db.session.add(registeredUser)
    db.session.commit()
+
+   return (True, "Success")
