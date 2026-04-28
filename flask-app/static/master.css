@@ -56,6 +56,39 @@
     font-size: x-large;
     color: #ffc478;
 }
+/* Will add styles for settings */
+.settings-controls
+{
+    text-align: center;
+    font-size: x-large;
+    color: #ffc478;
+}
+.settings-table {
+    border-collapse: collapse;
+    text-align: center;
+    margin: auto;
+    margin-top: 5%;
+    height: 20%;
+    width: 50%;
+    table-layout: fixed;
+}
+.settings-td td{
+    text-align: center;
+    /* padding: 10px; */
+}
+.settings-buttons
+{
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+}
+
+
+
+
+
+
+
 #username, #password{
     background-color: #ffc478;
     margin-left: 5px;
