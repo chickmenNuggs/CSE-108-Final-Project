@@ -59,24 +59,90 @@
                 </div>
                 <div class = canvas-holder>
                     <div class = "create-new">
-
-                        <label for="width">Width : </label>
-                        <input id="width">
-                        <label for="height">height : </label>
-                        <input id="height">
-
-                        <button> Swap Width and Height</button>
-                        
+                        <table id = create-holder>
+                            <tr>
+                                <td>
+                                    <label  class="create-input" for="width">Width : </label>
+                                    <input  class="create-input" id="width" value="7015">
+                                    <select class="create-input" name="width" id="w-measure" onclick="getprevUnit('w-measure')" onchange="unitConversion('w-measure')">
+                                        <option value="px">px</option>
+                                        <option value="cm">cm</option>
+                                        <option value="in">in</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label  class="create-input" for="height">height : </label>
+                                    <input  class="create-input" id="height" value="4960">
+                                    <select class="create-input" name="height" id="h-measure" onfocus="getprevUnit('h-measure')" onchange="unitConversion('h-measure')">
+                                        <option value="px">px</option>
+                                        <option value="cm">cm</option>
+                                        <option value="in">in</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                     <button class="create-input" onclick="swapWidthHeight()"> Swap Width and Height</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="create-input" onclick="canvasInit()"> Create Canvas </button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>       
-                    <canvas id="myCanvas" class = "hidden"></canvas>
+                    <canvas id="myCanvas" class = "hidden">
+                        Your browser does not support the Canvas element :&#40
+                    </canvas>
                </div>
                <div class = manipulator>
                     <div class = 'view-finder'>
-                        Navigator
+                        <!-- Navigator -->
                     </div>
-                    <div class="roster">
-                        Player1    
+                    <div class = neo-roster>
+                        <div class = header>
+                            <div id = l>
+                                Player Roster
+                            </div>
+                            <div id = r>
+                                1/4
+                            </div>
+                        </div>
+                        <div class = player-list>
+                            <div id = host> You (Host)</div>
+                        </div>
                     </div>
+<!-- 
+                    <table class = roster>
+                        <tr id = header>
+                            <th> Player Roster</th>
+                            <th id = count> 1/4</th>
+                        </tr>
+                        <tr id = player-list>
+                            <td colspan="2" id = host;>
+                                You (host)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id = player>
+                                text
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                text
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                text
+                            </td>
+                        </tr>
+                    </table>
+                     -->
                     <div class = 'layer'>
 
                     </div>

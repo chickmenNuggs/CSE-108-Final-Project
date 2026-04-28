@@ -235,7 +235,9 @@
     margin-left: 5px;
     width: 6vh;
 }
-
+#brush-range{
+    accent-color: #ffc478;
+}
 .canvas-holder{
     background-color: #494848;
     width: 66%;
@@ -246,15 +248,90 @@
 #myCanvas{
     background-color: white;
     border-bottom: #312515 solid 2px;
-    width: 10%;
-    height: 10%;
 
 }
-.create-new{
-    background-color: #c78f47;
-    width: 50%;
-    height: 50%;
+
+.neo-roster{
+    margin: auto; 
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #494848;
+    height: 30%;
+    width: 70%;
 }
+.neo-roster .header{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    background-color: #ce1b71;
+    color: white;
+}
+#l{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 74%;
+    height: 96%;
+    float: left;
+    text-align: center;    
+    border: 4px #494848, solid;
+    
+}
+#r{
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    width: 24%;
+    height: 96%;
+    float: right;
+    text-align: center;
+    border: 4px #494848, solid;
+
+}
+.player-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:  20%;
+    width: 96%;
+    background-color: white;
+    border: 4px #494848, solid;
+
+}
+
+.create-new{
+    margin: auto;
+    background-color: #e4ac63;
+    width: 30%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#create-holder{
+    margin: auto;
+    table-layout: fixed;
+    font-size: large;
+    font-weight: bold;
+    padding: 5px;
+}
+#create-holder td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#width, #height{
+    width: 40%;
+    padding-left: 5px;
+}
+.create-input{
+    font-size:medium;
+    font-weight: bold;
+}
+
 .manipulator{
     width: 20%;
     height: 99.3%;
