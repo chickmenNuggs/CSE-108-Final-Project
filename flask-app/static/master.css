@@ -238,16 +238,53 @@
 #brush-range{
     accent-color: #ffc478;
 }
+
+
+.slider {
+  -webkit-appearance: none;
+  width: 50%;
+  height: 10px;
+  border-radius: 5px;
+  background: #c78f47;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  margin: auto;
+  margin-right : 5%;
+}
+
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ffc478;
+  cursor: pointer;
+}
+
+#brush-num{
+    width: 25%;
+}
+
 .canvas-holder{
     background-color: #494848;
-    width: 66%;
+    width: 84.9%;
     height: 99.3%;
     border-bottom: #312515 solid 2px;
     display: flex;
+    overflow: scroll;
+    justify-content: center;
+    align-items: center;
+    border-right: #312515 solid 2px;
+
 }
 #myCanvas{
     background-color: white;
     border-bottom: #312515 solid 2px;
+    cursor:grabbing;
 
 }
 
