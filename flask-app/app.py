@@ -24,6 +24,7 @@ VIEW_LOBBIES = "ViewLobbies"
 JOIN_LOBBY = "JoinLobby"
 PLAYER_JOINED = "PlayerJoined"
 UPDATE_GAME_STATE = "UpdateGameState"
+GET_LOBBY_DATA = "GetLobbyData"
 
 
 @login_manager.user_loader
@@ -71,7 +72,7 @@ def home():
 @login_required
 def canvas(gameId):
     return render_template("canvas.html", gameId = gameId, LOBBY_LIST=LOBBY_LIST,CREATE_LOBBY=CREATE_LOBBY, VIEW_LOBBIES=VIEW_LOBBIES, 
-                           JOIN_LOBBY=JOIN_LOBBY, UPDATE_GAME_STATE = UPDATE_GAME_STATE, localUserName=session["user"])
+                           JOIN_LOBBY=JOIN_LOBBY, UPDATE_GAME_STATE = UPDATE_GAME_STATE, GET_LOBBY_DATA=GET_LOBBY_DATA, localUserName=session["user"])
 
 @app.route("/lobby/")
 @login_required

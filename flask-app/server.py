@@ -17,6 +17,7 @@ JOIN_LOBBY = "JoinLobby"
 PLAYER_JOINED = "PlayerJoined"
 UPDATE_GAME_STATE = "UpdateGameState"
 REMOVE_PLAYER_FROM_LOBBY = "RemovePlayerFromLobby"
+GET_LOBBY_DATA = "GetLobbyData"
 
 
 @socketio.on(CREATE_LOBBY)
@@ -83,6 +84,9 @@ def UpdateGameState(data):
 
 @socketio.on(REMOVE_PLAYER_FROM_LOBBY)
 def RemovePlayerFromLobby(data):
+    if len(lobbies) <= 0:
+        return
+    
     lobbyId = data.get("Id")
 
     print(f"DELETING PLAYER: {data.get("User")}")
@@ -104,3 +108,19 @@ def RemovePlayerFromLobby(data):
     if(len(players) <= 0):
         print(f"Deleting lobby: `{lobbyId}` due to the lack of players.")
         lobbies.pop(lobbyId)
+
+
+@socketio.on(GET_LOBBY_DATA)
+def GetLobbyData(data):
+    lobbyId = data.get("Id")
+    if not lobbyId or lobbyId not in lobbies:
+        emit("Error", {"message": "Lobby not found"})
+        return
+    
+    lobby = lobbies[lobbyId]
+    emit("LobbyData", {
+        "lobbyId": lobbyId,
+        "Name": lobby["Name"],
+        "PlayerCount": lobby["PlayerCount"],
+        "Players": lobby["Players"]
+    })
