@@ -79,6 +79,12 @@
 .settings-buttons
 {
     vertical-align: middle;
+    width: 100px;
+    height: 25px;
+    
+}
+.settings-checkbox{
+    vertical-align: middle;
     width: 18px;
     height: 18px;
 }
