@@ -1,129 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/master.css">
-    <title>Document</title>
-</head>
-<body>
-    <div class = background>
-        <div class = container>
-            <div class = action-bar>
-                <a class="action-buttons">File</a>
-                <a class="action-buttons">Edit</a>
-                <a class="action-buttons" href="{{url_for('home')}}" onclick="backWarn()">Home</a>
 
-            </div>
-            <div class = "wide-div">
-                <div class = tool-bar>
-                    <div class="color-selector">
-                        
-                    </div>
-                    <div class = selected-color>
-                        <label for ="selected-color"> Hex :</label>
-                        <input id = "selected-color" type = "text" value = "#000000" onchange="syncColor()"> 
-                    </div>
-                    <div class = brush-settings>
-                        <div class="brush-size">
-                            <input type="range" value="10" class= slider id = brush-range oninput="syncBrushSize('brush-range', 'brush-num')">
-                            <input type="number" id = brush-num min="1" max="100" step="1" value="10" oninput="syncBrushSize('brush-num', 'brush-range')">
-                        </div>
-                        <div class="brush-shape">
-                            <div>
-                                <button id ="e-pan">
-                                    Pan Screen
-                                </button>
-                            </div>
-                            <div>
-                                <button id = brush>
-                                    Brush
-                                </button>
-                            </div>
-                            <div>
-                                <button id = eraser>
-                                    Eraser
-                                </button>
-                            </div>
-                            <div>
-                                <button id = circle>
-                                    Circle
-                                </button>
-                                <input type="checkbox" id = "hollow-circle">
-                            </div>
-                            <div>
-                                <button id = square>
-                                    Square
-                                </button>
-                                <input type="checkbox" id = "hollow-circle">
-                            </div>
-                            <div>
-                                <button id = triangle>
-                                    Triangle
-                                </button>
-                                <input type="checkbox" id = "hollow-circle">
-                            </div>
-                        </div>
-                    </div>
-                    <div class = neo-roster>
-                        <div class = header>
-                            <div id = l>
-                                Player Roster
-                            </div>
-                            <div id = r>
-                                1/4
-                            </div>
-                        </div>
-                        <div class = player-list>
-                            <div id = host> You (Host)</div>
-                        </div>
-                    </div>
-                </div>
-                <div class = canvas-holder>
-                    <div class = "create-new">
-                        <table id = create-holder>
-                            <tr>
-                                <td>
-                                    <label  class="create-input" for="width">Width : </label>
-                                    <input  class="create-input" id="width" value="7015">
-                                    <select class="create-input" name="width" id="w-measure" onclick="getprevUnit('w-measure')" onchange="unitConversion('w-measure')">
-                                        <option value="px">px</option>
-                                        <option value="cm">cm</option>
-                                        <option value="in">in</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label  class="create-input" for="height">height : </label>
-                                    <input  class="create-input" id="height" value="4960">
-                                    <select class="create-input" name="height" id="h-measure" onfocus="getprevUnit('h-measure')" onchange="unitConversion('h-measure')">
-                                        <option value="px">px</option>
-                                        <option value="cm">cm</option>
-                                        <option value="in">in</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                     <button class="create-input" onclick="swapWidthHeight()"> Swap Width and Height</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button class="create-input" onclick="canvasInit()"> Create Canvas </button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>       
-                    <canvas id="myCanvas" class="hidden" onmousedown="startDraw()" onmouseup="endDraw()" onmousemove="draw()">
-                        Your browser does not support the Canvas element :&#40
-                    </canvas>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../static/master.css">
+   <title>Document</title>
+</head>
+
+<body>
+   <div class=background>
+      <div class=container>
+         <div class=action-bar>
+            <a class="action-buttons">File</a>
+            <a class="action-buttons">Edit</a>
+            <a class="action-buttons" href="{{url_for('home')}}" onclick="backWarn()">Home</a>
+
+         </div>
+         <div class="wide-div">
+            <div class=tool-bar>
+               <div class="color-selector">
+
+               </div>
+               <div class=selected-color>
+                  <label for="selected-color"> Hex :</label>
+                  <input id="selected-color" type="text" value="#000000" onchange="syncColor()">
+               </div>
+               <div class=brush-settings>
+                  <div class="brush-size">
+                     <input type="range" value="10" class=slider id=brush-range
+                        oninput="syncBrushSize('brush-range', 'brush-num')">
+                     <input type="number" id=brush-num min="1" max="100" step="1" value="10"
+                        oninput="syncBrushSize('brush-num', 'brush-range')">
+                  </div>
+                  <div class="brush-shape">
+                     <div>
+                        <button id="e-pan">
+                           Pan Screen
+                        </button>
+                     </div>
+                     <div>
+                        <button id=brush>
+                           Brush
+                        </button>
+                     </div>
+                     <div>
+                        <button id=eraser>
+                           Eraser
+                        </button>
+                     </div>
+                     <div>
+                        <button id=circle>
+                           Circle
+                        </button>
+                        <input type="checkbox" id="hollow-circle">
+                     </div>
+                     <div>
+                        <button id=square>
+                           Square
+                        </button>
+                        <input type="checkbox" id="hollow-circle">
+                     </div>
+                     <div>
+                        <button id=triangle>
+                           Triangle
+                        </button>
+                        <input type="checkbox" id="hollow-circle">
+                     </div>
+                  </div>
+               </div>
+               <div class=neo-roster>
+                  <div class=header>
+                     <div id=l>
+                        Player Roster
+                     </div>
+                     <div id=r>
+                        1/4
+                     </div>
+                  </div>
+                  <div class=player-list>
+                     <div id=host> You (Host)</div>
+                  </div>
                </div>
             </div>
-        </div>
-    </div>
-    <script src= "../static/master.js"></script>
+            <div class=canvas-holder>
+               <div class="create-new">
+                  <table id=create-holder>
+                     <tr>
+                        <td>
+                           <label class="create-input" for="width">Width : </label>
+                           <input class="create-input" id="width" value="7015">
+                           <select class="create-input" name="width" id="w-measure" onclick="getprevUnit('w-measure')"
+                              onchange="unitConversion('w-measure')">
+                              <option value="px">px</option>
+                              <option value="cm">cm</option>
+                              <option value="in">in</option>
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <label class="create-input" for="height">height : </label>
+                           <input class="create-input" id="height" value="4960">
+                           <select class="create-input" name="height" id="h-measure" onfocus="getprevUnit('h-measure')"
+                              onchange="unitConversion('h-measure')">
+                              <option value="px">px</option>
+                              <option value="cm">cm</option>
+                              <option value="in">in</option>
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <button class="create-input" onclick="swapWidthHeight()"> Swap Width and Height</button>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <button class="create-input" onclick="canvasInit()"> Create Canvas </button>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <canvas id="myCanvas" class="hidden" onmousedown="startDraw()" onmouseup="endDraw()"
+                  onmousemove="draw()">
+                  Your browser does not support the Canvas element :&#40
+               </canvas>
+            </div>
+         </div>
+      </div>
+   </div>
+   <script src="../static/master.js"></script>
+   <script>
+      window.localUserName = "{{ localUserName }}";
+      window.gameId = "{{gameId}}"
+      window.SOCKET_EVENTS = {
+         LOBBY_LIST: "{{ LOBBY_LIST }}",
+         CREATE_LOBBY: "{{ CREATE_LOBBY }}",
+         VIEW_LOBBIES: "{{ VIEW_LOBBIES }}",
+         JOIN_LOBBY: "{{ JOIN_LOBBY }}",
+         UPDATE_GAME_STATE: "{{UPDATE_GAME_STATE}}"
+      };
+   </script>
+
+   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+   <script src="/static/Socket.js"></script>
+   <script src="../static/ClientCanvas.js"></script>
 
 </body>
+
 </html>

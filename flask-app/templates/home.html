@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src= "../static/master.js"></script>
-    <link rel="stylesheet" href="../static/master.css">
-    <title>Drawing app</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../static/master.js"></script>
+   <link rel="stylesheet" href="../static/master.css">
+   <title>Drawing app</title>
 </head>
+
 <body>
-    <div class = background>
-        <div class = menu>
-            <div class = vert-bar>
-                <a class = "vert-button" href="{{url_for('canvas')}}">Illustrate</a>
-                <a class = "vert-button" href="{{url_for('lobby')}}">Draw with a friend</a>
-                <a class = "vert-button" href="{{url_for('saved')}}">Saved Drawings</a>
-                <a class = "vert-button" href="{{url_for('settings')}}">Settings</a>
-                <a class = "vert-button" href="{{url_for('profile')}}">Profile</a>
-            </div>
-            <div class = instruction>
-                <p>
-                    Illustrate : Free Draw on a web-canvas
-                </p>
-                <p>
-                    Draw with a friend : Redirect to a lobby page, where you can matchmake with a friend to draw together (Log-in Required)
-                </p>
-                <p>
-                    Saved Drawings : Browse Illustrations you have saved (Log-in Required)
-                </p>
-                <p>
-                    Settings : Manage Site Settings (Log-in Required)
-                </p>
-                <p>
-                    Profile : Manage Profile (Log-in Required)
-                </p>
-            </div>
-        </div>
-    </div>
+   <div class=background>
+      <div class=menu>
+         <div class=vert-bar>
+            <!-- This is for a local canvas so we jsut force id to be 0 -->
+            <a class="vert-button" href="{{ url_for('canvas', gameId = 0) }}">
+               Illustrate
+            </a>
+            <a class="vert-button" href="{{url_for('lobby')}}">Draw with a friend</a>
+            <a class="vert-button" href="{{url_for('saved')}}">Saved Drawings</a>
+            <a class="vert-button" href="{{url_for('settings')}}">Settings</a>
+            <a class="vert-button" href="{{url_for('profile')}}">Profile</a>
+         </div>
+         <div class=instruction>
+            <p>
+               Illustrate : Free Draw on a web-canvas
+            </p>
+            <p>
+               Draw with a friend : Redirect to a lobby page, where you can matchmake with a friend to draw together
+               (Log-in Required)
+            </p>
+            <p>
+               Saved Drawings : Browse Illustrations you have saved (Log-in Required)
+            </p>
+            <p>
+               Settings : Manage Site Settings (Log-in Required)
+            </p>
+            <p>
+               Profile : Manage Profile (Log-in Required)
+            </p>
+         </div>
+      </div>
+   </div>
 </body>
-</html> 
+
+</html>

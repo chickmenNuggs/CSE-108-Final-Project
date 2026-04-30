@@ -40,8 +40,20 @@
          </div>
       </div>
    </div>
+   <!-- Don't remove the line below this is needed to get local username -->
+   <script>
+      window.localUserName = {{ localUserName | tojson }};
+      window.SOCKET_EVENTS = {
+         LOBBY_LIST: "{{ LOBBY_LIST }}",
+         CREATE_LOBBY: "{{ CREATE_LOBBY }}",
+         VIEW_LOBBIES: "{{ VIEW_LOBBIES }}",
+         JOIN_LOBBY: "{{ JOIN_LOBBY }}",
+         LOBBY_CREATED: "LobbyCreated"
+      };
+   </script>
    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-   <script src="../static/Client.js"></script>
+   <script src="/static/Socket.js"></script> <!-- MUST come first -->
+   <script src="../static/ClientLobby.js"></script>
    <script src="../static/Lobby.js"></script>
    <link rel="stylesheet" href="../static/master.css">
 </body>

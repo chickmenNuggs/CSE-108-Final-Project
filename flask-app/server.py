@@ -1,5 +1,5 @@
-from flask import Flask, render_template , session
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, rooms
+from flask import Flask, redirect, url_for
 
 import random
 import string
@@ -14,29 +14,93 @@ LOBBY_LIST = "LobbyList"
 CREATE_LOBBY = "CreateLobby"
 VIEW_LOBBIES = "ViewLobbies"
 JOIN_LOBBY = "JoinLobby"
+PLAYER_JOINED = "PlayerJoined"
+UPDATE_GAME_STATE = "UpdateGameState"
+REMOVE_PLAYER_FROM_LOBBY = "RemovePlayerFromLobby"
+
 
 @socketio.on(CREATE_LOBBY)
-def CreateLobby(name):
-   lobbyId = str(len(lobbies) + 1)
-   if not name:
-      characters = string.ascii_letters + string.digits
-      name = "".join(random.choice(characters) for _ in range(MAX_LOBBY_ID_LENGTH))
+def CreateLobby(data):
+    
+    name = data.get("name")
+    host = data.get("host")
 
-   lobbies[lobbyId] = {"name": name, "players": 1}
-   print(f"Created a new lobby with id: {lobbyId} and name: {name} ")
-   print(f"We now have: {len(lobbies)} lobbie(s)");
-   EmitMessage(LOBBY_LIST, lobbies)
+    lobbyId = str(len(lobbies) + 1)
+    if not name:
+        characters = string.ascii_letters + string.digits
+        name = "".join(random.choice(characters) for _ in range(MAX_LOBBY_ID_LENGTH))
+
+    lobbies[lobbyId] = {
+        "Name": name,
+        "PlayerCount": 1,  
+        "Players": [host]
+    }
+
+    join_room(lobbyId)
+    emit("LobbyCreated", {"Id": lobbyId})
 
 
 @socketio.on(LOBBY_LIST)
 def ViewLobbies():
-   EmitMessage(LOBBY_LIST, lobbies, False)
+    lobby_data = {}
+    for lobbyId, lobbyInfo in lobbies.items():
+        lobby_data[lobbyId] = {
+            "Name": lobbyInfo["Name"],
+            "PlayerCount": lobbyInfo["PlayerCount"],
+            "Players": lobbyInfo["Players"]
+        }
+    emit(LOBBY_LIST, lobby_data)
+
 
 @socketio.on(JOIN_LOBBY)
-def JoinLobby(id):
-   lobbies[id]["players"] += 1
-   print(f"player: {id} has joined the lobby. There are now `{lobbies[id]["players"]}` in the lobby")
-   # some other stuff down here
+def JoinLobby(data):
 
-def EmitMessage(message, args, broadcast = True):
-   emit(message, args, broadcast = broadcast)
+    lobbyId = data.get("Id")
+    user = data.get("User")
+
+    print("JOIN REQUEST:", data)
+
+    if lobbyId not in lobbies:
+        print("Invalid lobby:", lobbyId)
+        emit("Error", {"message": "Lobby not found"})
+        return
+
+    join_room(lobbyId)
+
+    lobbies[lobbyId]["PlayerCount"] += 1
+    lobbies[lobbyId]["Players"].append(user)
+
+
+
+@socketio.on(UPDATE_GAME_STATE)
+def UpdateGameState(data):
+    lobby = lobbies.get(data.get("Id"))
+    if not lobby:
+        emit("Redirect", {"Url": "/lobby" })
+        return
+        
+    print(lobbies[data.get("Id")])
+
+@socketio.on(REMOVE_PLAYER_FROM_LOBBY)
+def RemovePlayerFromLobby(data):
+    lobbyId = data.get("Id")
+
+    print(f"DELETING PLAYER: {data.get("User")}")
+
+    if not lobbyId:
+        print("No lobbyId given when trying to remove a player")
+        return
+    
+    disconnectedUser = data.get("User")
+
+    if not disconnectedUser:
+        print("No username was given to be deleted")
+        return
+
+    lobby = lobbies[lobbyId]
+    players = lobby["Players"]
+    players.remove(disconnectedUser)
+
+    if(len(players) <= 0):
+        print(f"Deleting lobby: `{lobbyId}` due to the lack of players.")
+        lobbies.pop(lobbyId)

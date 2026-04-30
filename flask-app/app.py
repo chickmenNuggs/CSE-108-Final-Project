@@ -17,6 +17,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+MAX_LOBBY_ID_LENGTH = 8
+LOBBY_LIST = "LobbyList"
+CREATE_LOBBY = "CreateLobby"
+VIEW_LOBBIES = "ViewLobbies"
+JOIN_LOBBY = "JoinLobby"
+PLAYER_JOINED = "PlayerJoined"
+UPDATE_GAME_STATE = "UpdateGameState"
+
+
 @login_manager.user_loader
 def load_user(id):
     return GetUser(id)
@@ -36,6 +45,7 @@ def login_post():
 
     if LoggedInSucessfully(username, password):
         session["user"] = username
+        print("SESSION USER:", session.get("user"))
         return redirect(url_for("home"))
 
     return "Invalid login"
@@ -57,15 +67,16 @@ def register():
 def home():
     return render_template("home.html",)
 
-@app.route("/canvas/")
+@app.route("/canvas/<gameId>")
 @login_required
-def canvas():
-    return render_template("canvas.html")
+def canvas(gameId):
+    return render_template("canvas.html", gameId = gameId, LOBBY_LIST=LOBBY_LIST,CREATE_LOBBY=CREATE_LOBBY, VIEW_LOBBIES=VIEW_LOBBIES, 
+                           JOIN_LOBBY=JOIN_LOBBY, UPDATE_GAME_STATE = UPDATE_GAME_STATE, localUserName=session["user"])
 
 @app.route("/lobby/")
 @login_required
 def lobby():
-    return render_template("lobby.html", username = session["user"])
+    return render_template("lobby.html", LOBBY_LIST=LOBBY_LIST,CREATE_LOBBY=CREATE_LOBBY, VIEW_LOBBIES=VIEW_LOBBIES, JOIN_LOBBY=JOIN_LOBBY, localUserName=session["user"])
 
 @app.route("/profile/")
 @login_required
