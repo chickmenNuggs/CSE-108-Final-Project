@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src= "../static/master.js"></script>
-    <link rel="stylesheet" href="../static/master.css">
-    <title>Drawing app</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../static/master.css">
+   <title>Drawing app</title>
 </head>
+
 <body>
-    <div class = background>
-        <div class = login-header>
-            Online Drawing App
-        </div>
-        <div class = login-container>
-            <form action="{{ url_for('login_post') }}" method="POST">
-            <table class = "login-handler">
-                <tr>
-                    <td>
-                        <label class="login-info">Username: </label>
-                        <input type = "text" class="login-info" id = "username" name = "username">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label class="login-info">Password: </label>
-                        <input type = "password" class="login-info" id = "password" name = "password">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type = "submit" class = "login-info" id = "login-button" value = "Login">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="{{ url_for('signup') }}" class = "login-info" id = "signup-link">Sign up here.</a>
-                    </td>
-                </tr>
+   <div class=background>
+      <div class=login-header>
+         Online Drawing App
+      </div>
+      <div class=login-container>
+         <form action="{{ url_for('login_post') }}" method="POST">
+            <table class="login-handler">
+               <tr>
+                  <td>
+                     <label class="login-info">Username: </label>
+                     <input type="text" class="login-info" id="username" name="username">
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <label class="login-info">Password: </label>
+                     <input type="password" class="login-info" id="password" name="password">
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <input type="submit" class="login-info" id="login-button" value="Login">
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <a href="{{ url_for('signup') }}" class="login-info" id="signup-link">Sign up here.</a>
+                  </td>
+               </tr>
             </table>
-            </form>
-        </div>
-    </div>
+         </form>
+      </div>
+   </div>
 </body>
+
 </html>
