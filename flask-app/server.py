@@ -16,7 +16,7 @@ VIEW_LOBBIES = "ViewLobbies"
 JOIN_LOBBY = "JoinLobby"
 PLAYER_JOINED = "PlayerJoined"
 UPDATE_GAME_STATE = "UpdateGameState"
-REMOVE_PLAYER_FROM_LOBBY = "RemovePlayerFromLobby"
+CLIENT_DISCONNECTED = "ClientDisconnected"
 GET_LOBBY_DATA = "GetLobbyData"
 
 
@@ -57,7 +57,6 @@ def ViewLobbies():
 def JoinLobby(data):
 
     lobbyId = data.get("Id")
-    user = data.get("User")
 
     print("JOIN REQUEST:", data)
 
@@ -66,11 +65,7 @@ def JoinLobby(data):
         emit("Error", {"message": "Lobby not found"})
         return
 
-    join_room(lobbyId)
-
-    lobbies[lobbyId]["PlayerCount"] += 1
-    lobbies[lobbyId]["Players"].append(user)
-
+    print("Joining lobby");
 
 
 @socketio.on(UPDATE_GAME_STATE)
@@ -84,7 +79,7 @@ def UpdateGameState(data):
     print(len(clientData))
     print(lobbies[data.get("Id")])
 
-@socketio.on(REMOVE_PLAYER_FROM_LOBBY)
+@socketio.on(CLIENT_DISCONNECTED)
 def RemovePlayerFromLobby(data):
     if len(lobbies) <= 0:
         return
@@ -125,4 +120,34 @@ def GetLobbyData(data):
         "Name": lobby["Name"],
         "PlayerCount": lobby["PlayerCount"],
         "Players": lobby["Players"]
-    })
+    }, room = lobbyId)
+
+@socketio.on("ClientConnected")
+def OnClientConnected(data):
+    lobbyId = data.get("Id")
+
+    if not lobbyId:
+        EmitErrorMessage("Client does not have a lobby Id.")
+        return
+
+    lobby = lobbies[lobbyId]
+
+    user = data.get("User")
+
+    if not user:
+        EmitErrorMessage("Client does not have a username.")
+        return
+    
+    join_room(lobbyId)
+
+    if user in lobby["Players"]:
+        EmitErrorMessage(f"User: `{user}` is already a player.")
+        return
+
+    print(f"Adding player: `{user}` into the lobby.")
+    lobby["Players"].append(user)
+    lobby["PlayerCount"] += 1
+
+def EmitErrorMessage(message):
+    print(message)
+    emit("Error", {"message": message})

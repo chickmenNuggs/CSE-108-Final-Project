@@ -1,24 +1,24 @@
 const playerList = document.getElementsByClassName( "player-list" )[ 0 ];
 
-// 10 ticks per second
-const TICK_RATE = 10;
-const TICK_INTERVAL = 1000 / TICK_RATE;
-
 let clientDataList = [];
+
+// Must be called first over request lobby.
+SendLobbyData();
 
 // Request lobby data when the page loads
 RequestLobbyData();
 
-setInterval( () =>
+
+function SendLobbyData ()
 {
-   UpdateGameState();
-}, TICK_INTERVAL );
+   window.socket.emit( "ClientConnected", { "Id": window.gameId, "User": window.localUserName } )
+}
 
 
 window.socket.on( "LobbyData", ( data ) =>
 {
-   console.log( "Received lobby data:", data );
-   // UpdatePlayerList( data.Players );
+   console.log( "Player requested lobby data" );
+   UpdatePlayerList( data.Players );
 } );
 
 
@@ -31,17 +31,19 @@ window.socket.on( "Redirect", ( data ) =>
 window.onbeforeunload = function ()
 {
    console.log( window.localUserName );
-   window.socket.emit( "RemovePlayerFromLobby", {
+   window.socket.emit( "ClientDisconnected", {
       Id: window.gameId,
       User: window.localUserName
    } )
+
+   RequestLobbyData();
 }
 
 
 function UpdatePlayerList ( players )
 {
    playerList.innerHTML = "";
-
+   console.log( players );
    players.forEach( player =>
    {
       console.log( player );
