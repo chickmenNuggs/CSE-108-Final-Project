@@ -79,7 +79,9 @@ def UpdateGameState(data):
     if not lobby:
         emit("Redirect", {"Url": "/lobby" })
         return
-        
+
+    clientData = data.get("ClientData")
+    print(len(clientData))
     print(lobbies[data.get("Id")])
 
 @socketio.on(REMOVE_PLAYER_FROM_LOBBY)

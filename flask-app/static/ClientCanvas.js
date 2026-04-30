@@ -4,6 +4,8 @@ const playerList = document.getElementsByClassName( "player-list" )[ 0 ];
 const TICK_RATE = 10;
 const TICK_INTERVAL = 1000 / TICK_RATE;
 
+let clientDataList = [];
+
 // Request lobby data when the page loads
 RequestLobbyData();
 
@@ -64,6 +66,44 @@ function UpdateGameState ()
 {
    window.socket.emit( window.SOCKET_EVENTS.UPDATE_GAME_STATE, {
       Id: window.gameId,
-      User: window.localUserName
+      User: window.localUserName,
+      ClientData: clientDataList.map( client => ( {
+         point: {
+            x: client.point.x,
+            y: client.point.y
+         },
+         brushSize: client.brushSize,
+         brushColor: client.brushColor
+      } ) )
    } );
+}
+
+const CLIENT_DATA_THRESHOLD = 50
+
+function AddClientData ( x, y, brushSize, brushColor )
+{
+   if ( clientDataList.length >= CLIENT_DATA_THRESHOLD )
+   {
+      UpdateGameState();
+      clientDataList = []
+   }
+   clientDataList.push( new ClientData( new Vector( x, y ), brushSize, brushColor ) )
+}
+class Vector
+{
+   constructor ( x, y )
+   {
+      this.x = x;
+      this.y = y;
+   }
+}
+
+class ClientData
+{
+   constructor ( vector, brushSize, brushColor )
+   {
+      this.point = vector;
+      this.brushSize = brushSize;
+      this.brushColor = brushColor;
+   }
 }
