@@ -2,11 +2,16 @@ const playerList = document.getElementsByClassName( "player-list" )[ 0 ];
 
 let clientDataList = [];
 
-// Must be called first over request lobby.
-SendLobbyData();
+const SINGLE_PLAYER = 0
 
-// Request lobby data when the page loads
-RequestLobbyData();
+if ( !IsSinglePlayerSession() )
+{
+   // Must be called first over request lobby.
+   SendLobbyData();
+
+   // Request lobby data when the page loads
+   RequestLobbyData();
+}
 
 
 function SendLobbyData ()
@@ -17,8 +22,16 @@ function SendLobbyData ()
 
 window.socket.on( "LobbyData", ( data ) =>
 {
-   console.log( "Player requested lobby data" );
+   LogCurrentWebsocketEvent( "Get Lobby Data", `Recieved lobby data for lobby: ${ data.Id }` )
    UpdatePlayerList( data.Players );
+} );
+
+window.socket.on( "SetClientCanvas", ( data ) =>
+{
+   let width = data.Width;
+   let height = data.Height;
+   LogCurrentWebsocketEvent( "SetClientCanvas", `Client "${ window.localUserName }" is creating canvas with width "${ width }" and height "${ height }" from host.` );
+   SetClientCanvas( width, height );
 } );
 
 
@@ -27,6 +40,11 @@ window.socket.on( "Redirect", ( data ) =>
    window.location.href = data.Url;
 } );
 
+
+window.socket.on( "SyncBoard", ( data ) =>
+{
+   LogCurrentWebsocketEvent( "Sync Board", `Syncing current board state to every client.` )
+} );
 
 window.onbeforeunload = function ()
 {
@@ -59,6 +77,7 @@ function UpdatePlayerList ( players )
 
 function RequestLobbyData ()
 {
+   LogCurrentWebsocketEvent( "Request Lobby Data", `Requesting lobby data for lobby: ${ window.gameId }` );
    window.socket.emit( window.SOCKET_EVENTS.GET_LOBBY_DATA, {
       Id: window.gameId
    } );
@@ -78,9 +97,11 @@ function UpdateGameState ()
          brushColor: client.brushColor
       } ) )
    } );
+
+   LogCurrentWebsocketEvent( "Update Game State", `Sending client "${ window.localUserName }" current board state to everyone in the lobby.` )
 }
 
-const CLIENT_DATA_THRESHOLD = 50
+const CLIENT_DATA_THRESHOLD = 10
 
 function AddClientData ( x, y, brushSize, brushColor )
 {
@@ -90,6 +111,16 @@ function AddClientData ( x, y, brushSize, brushColor )
       clientDataList = []
    }
    clientDataList.push( new ClientData( new Vector( x, y ), brushSize, brushColor ) )
+}
+
+function LogCurrentWebsocketEvent ( event, message )
+{
+   console.log( `${ event }: ${ message }` )
+}
+
+function IsSinglePlayerSession () 
+{
+   return window.gameId == SINGLE_PLAYER
 }
 class Vector
 {

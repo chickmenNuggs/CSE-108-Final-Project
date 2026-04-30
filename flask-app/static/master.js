@@ -10,13 +10,13 @@ let isDrawing = false;
 
 
 
-canvas = document.getElementById( 'myCanvas' );
-ctx = canvas.getContext( '2d' )
-create = document.getElementsByClassName( 'create-new' )[ 0 ];
-w = document.getElementById( 'width' );
-h = document.getElementById( 'height' );
-width = document.getElementById( 'w-measure' );
-height = document.getElementById( 'h-measure' );
+let canvas = document.getElementById( 'myCanvas' );
+let ctx = canvas.getContext( '2d' )
+let create = document.getElementsByClassName( 'create-new' )[ 0 ];
+let w = document.getElementById( 'width' );
+let h = document.getElementById( 'height' );
+let width = document.getElementById( 'w-measure' );
+let height = document.getElementById( 'h-measure' );
 var x, y;
 // syncBrushSize();
 
@@ -70,7 +70,23 @@ function canvasInit ()
    {
       return "Data will be lost if you leave the page, are you sure?";
    };
+
+   if ( !IsSinglePlayerSession() )
+   {
+      LogCurrentWebsocketEvent( "Canvas Created", `Updating canvas information for lobby "${ window.gameId }"` )
+      window.socket.emit( "CreatedCanvas", { "Width": canvas.width, "Height": canvas.height, "Id": window.gameId } )
+   }
 }
+
+function SetClientCanvas ( width, height )
+{
+   canvas.width = width;
+   canvas.height = height;
+
+   create.classList.add( 'hidden' );
+   canvas.classList.remove( 'hidden' );
+}
+
 function backWarn () { window.onbeforeunload = function () { return "Data will be lost if you leave the page, are you sure?"; }; }
 
 function startDraw ()
@@ -94,6 +110,7 @@ canvas.addEventListener( 'mousemove', ( e ) =>
    x = ( e.clientX - rect.left ) * scaleX;
    y = ( e.clientY - rect.top ) * scaleY;
 
+
    x = Math.round( x );
    y = Math.round( y );
 
@@ -109,10 +126,13 @@ function draw ( x, y )
    canvas = document.getElementById( 'myCanvas' );
    let ctx = canvas.getContext( '2d' );
    syncColor();
-   if ( !isDrawing ) { return; }
-   console.log( x, y )
+
    drawPencil( x, y, brushSize, brushColor )
-   AddClientData( x, y, brushSize, brushColor )
+
+   if ( !IsSinglePlayerSession() )
+   {
+      AddClientData( x, y, brushSize, brushColor )
+   }
 };
 
 function drawPencil ( x, y, rad, color )
