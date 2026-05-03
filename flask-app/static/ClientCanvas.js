@@ -16,6 +16,7 @@ if ( !IsSinglePlayerSession() )
 
 function SendLobbyData ()
 {
+   LogCurrentWebsocketEvent( "Client connected", "Client has connected" );
    window.socket.emit( "ClientConnected", { "Id": window.gameId, "User": window.localUserName } )
 }
 
@@ -24,15 +25,39 @@ window.socket.on( "LobbyData", ( data ) =>
 {
    LogCurrentWebsocketEvent( "Get Lobby Data", `Recieved lobby data for lobby: ${ data.Id }` )
    UpdatePlayerList( data.Players );
+
+   console.log( data.Players );
+   console.log( IsHost( data.Players[ 0 ] ) );
+
+   if ( IsHost( data.Players[ 0 ] ) )
+   {
+      window.socket.emit( "SyncBoardOnLateJoin", { "Canvas": canvas.toDataURL(), "Id": window.gameId } );
+   }
+} );
+
+window.socket.on( "SyncBoardOnLateJoin", ( canvas ) =>
+{
+   LogCurrentWebsocketEvent( "SyncBoardOnLateJoin", "Sending canvas data over" );
+   const img = new Image();
+   img.src = canvas;
+   img.onload = () =>
+   {
+      ctx.drawImage( img, 0, 0 );
+   };
 } );
 
 window.socket.on( "SetClientCanvas", ( data ) =>
 {
-   let width = data.Width;
-   let height = data.Height;
+   // first index is always the host.
+   if ( IsHost( data.Players[ 0 ] ) ) return;
+
+   let width = data.Canvas.Width;
+   let height = data.Canvas.Height;
    LogCurrentWebsocketEvent( "SetClientCanvas", `Client "${ window.localUserName }" is creating canvas with width "${ width }" and height "${ height }" from host.` );
    SetClientCanvas( width, height );
+
 } );
+
 
 
 window.socket.on( "Redirect", ( data ) =>
@@ -44,6 +69,10 @@ window.socket.on( "Redirect", ( data ) =>
 window.socket.on( "SyncBoard", ( data ) =>
 {
    LogCurrentWebsocketEvent( "Sync Board", `Syncing current board state to every client.` )
+   for ( const board of data )
+   {
+      drawPencil( board.point.x, board.point.y, board.brushSize, board.brushColor )
+   }
 } );
 
 window.onbeforeunload = function ()
@@ -57,14 +86,16 @@ window.onbeforeunload = function ()
    RequestLobbyData();
 }
 
+function IsHost ( host )
+{
+   return window.localUserName === host;
+}
 
 function UpdatePlayerList ( players )
 {
    playerList.innerHTML = "";
-   console.log( players );
    players.forEach( player =>
    {
-      console.log( player );
       const playerDiv = document.createElement( "div" );
       playerDiv.textContent = player;
       if ( player === window.localUserName )
@@ -111,6 +142,13 @@ function AddClientData ( x, y, brushSize, brushColor )
       clientDataList = []
    }
    clientDataList.push( new ClientData( new Vector( x, y ), brushSize, brushColor ) )
+}
+
+function ForceSyncBoard ()
+{
+   UpdateGameState();
+
+   clientDataList = [];
 }
 
 function LogCurrentWebsocketEvent ( event, message )

@@ -74,7 +74,7 @@ function canvasInit ()
    if ( !IsSinglePlayerSession() )
    {
       LogCurrentWebsocketEvent( "Canvas Created", `Updating canvas information for lobby "${ window.gameId }"` )
-      window.socket.emit( "CreatedCanvas", { "Width": canvas.width, "Height": canvas.height, "Id": window.gameId } )
+      window.socket.emit( "CreatedCanvas", { "Width": canvas.width, "Height": canvas.height, "Context": ctx, "Id": window.gameId } )
    }
 }
 
@@ -119,6 +119,11 @@ canvas.addEventListener( 'mousemove', ( e ) =>
       draw( x, y );
    }
 } )
+
+canvas.addEventListener( "mouseup", ( e ) =>
+{
+   ForceSyncBoard();
+} );
 
 
 function draw ( x, y )

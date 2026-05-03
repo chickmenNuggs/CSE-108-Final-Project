@@ -35,7 +35,8 @@ def CreateLobby(data):
         "Name": name,
         "PlayerCount": 1,  
         "Players": [host],
-        "Canvas": {"Width": 0, "Height": 0   }
+        "Host": host,
+        "Canvas": {"Width": 0, "Height": 0  }
     }
 
     join_room(lobbyId)
@@ -81,6 +82,24 @@ def UpdateGameState(data):
     clientData = data.get("ClientData")
     emit("SyncBoard", clientData, include_self=False, room = lobbyId)
 
+
+@socketio.on("SyncBoardOnLateJoin")
+def SyncBoardOnLateConnect(data):
+    
+    lobbyId = data.get("Id")
+
+    if not lobbyId:
+        EmitErrorMessage("No lobby Id.")
+        return
+
+    canvas = data.get("Canvas")
+
+    if not canvas:
+        EmitErrorMessage("No canvas given.")
+        return
+
+    emit("SyncBoardOnLateJoin", canvas, room = lobbyId, include_self=False)
+
 @socketio.on(CLIENT_DISCONNECTED)
 def RemovePlayerFromLobby(data):
     if len(lobbies) <= 0:
@@ -119,10 +138,11 @@ def OnCreateCanvas(data):
     
     canvasWidth = data.get("Width")
     canvasHeight = data.get("Height")
-
+    
     lobby["Canvas"]["Width"] = canvasWidth
     lobby["Canvas"]["Height"] = canvasHeight
-    emit("SetClientCanvas", lobbies[lobbyId]["Canvas"], include_self=False, room = lobbyId)
+
+    emit("SetClientCanvas", lobbies[lobbyId], include_self=False, room = lobbyId)
 
 
 @socketio.on(GET_LOBBY_DATA)
@@ -168,7 +188,7 @@ def OnClientConnected(data):
     print(f"Adding player: `{user}` into the lobby.")
     lobby["Players"].append(user)
     lobby["PlayerCount"] += 1
-    emit("SetClientCanvas", lobbies[lobbyId]["Canvas"])
+    emit("SetClientCanvas", lobbies[lobbyId], room = lobbyId)
 
 
 
