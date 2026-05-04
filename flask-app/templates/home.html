@@ -10,6 +10,9 @@
 
 <body>
    <div class=background>
+      <p style="color:#ffc478; text-align:center;">
+         Logged in as {{ session["user"] }}
+      </p>
       <div class=menu>
          <div class=vert-bar>
             <!-- This is for a local canvas so we jsut force id to be 0 -->
@@ -20,6 +23,7 @@
             <a class="vert-button" href="{{url_for('saved')}}">Saved Drawings</a>
             <a class="vert-button" href="{{url_for('settings')}}">Settings</a>
             <a class="vert-button" href="{{url_for('profile')}}">Profile</a>
+            <a class="vert-button" href="{{ url_for('logout') }}">Logout</a>
          </div>
          <div class=instruction>
             <p>
