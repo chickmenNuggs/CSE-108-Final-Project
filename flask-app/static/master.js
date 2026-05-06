@@ -4,21 +4,80 @@ const in_to_cm = 2.54;
 let prevUnitW;
 let prevUnitH;
 let brushSize = 10;
-let brushType = 'brush';
+let brushType;
 let brushColor;
 let isDrawing = false;
-
-
-
-let canvas = document.getElementById( 'myCanvas' );
-let ctx = canvas.getContext( '2d' )
-let create = document.getElementsByClassName( 'create-new' )[ 0 ];
-let w = document.getElementById( 'width' );
-let h = document.getElementById( 'height' );
-let width = document.getElementById( 'w-measure' );
-let height = document.getElementById( 'h-measure' );
+let isSaved = false;
+let isShowing = false;
 var x, y;
-// syncBrushSize();
+
+
+canvas = document.getElementById('myCanvas');
+ctx = canvas.getContext('2d')
+create = document.getElementsByClassName('create-new')[0];
+w = document.getElementById('width');
+h = document.getElementById('height');         
+width = document.getElementById('w-measure');
+height = document.getElementById('h-measure');
+   b = document.getElementById('brush');
+   e = document.getElementById('eraser');
+   p = document.getElementById('e-pan');
+ 
+window.addEventListener('load', (event) => {
+   syncBrushSize()
+   syncColor()
+   brushType = 'brush'
+});
+
+document.addEventListener('click', (event) => {
+   if(isShowing == false){
+      hideMenu();
+   }
+   isShowing = false;
+});
+
+
+function showMenu(){
+   isShowing = true;
+   menu = document.getElementById('files');
+   files.classList.remove('hidden')
+}
+
+function hideMenu(){
+   menu = document.getElementById('files');
+   files.classList.add('hidden')
+}
+
+
+function clearCanvas(){
+   ctx.clearRect(0, 0, canvas.width, canvas.height)
+   hideMenu();
+}
+
+function newCanvas(){
+   if(isSaved == false){
+      backWarn();
+   }
+   clearCanvas()
+   canvas.classList.add('hidden') 
+   create.classList.remove('hidden')
+}
+
+function saveCanvas(){
+
+}
+
+function exportCanvas(){
+   
+}
+
+function zoomIn(){
+
+}
+function zoomOut(){
+
+}
+
 
 /* Canvas Js Start*/
 function canvasInit ()
@@ -63,8 +122,18 @@ function canvasInit ()
       canvas.height = h.value
    }
 
-   create.classList.add( 'hidden' );
-   canvas.classList.remove( 'hidden' );
+   create.classList.add('hidden');
+   canvas.classList.remove('hidden');
+   brushColor = '#000000';
+   brushType = 'brush';
+   brushSize = 10;
+
+   window.onbeforeunload = function() {
+   return "Data will be lost if you leave the page, are you sure?";
+};
+}
+
+function backWarn(){ window.onbeforeunload = function() { return "Data will be lost if you leave the page, are you sure?"; }; }
 
    window.onbeforeunload = function ()
    {
@@ -76,7 +145,6 @@ function canvasInit ()
       LogCurrentWebsocketEvent( "Canvas Created", `Updating canvas information for lobby "${ window.gameId }"` )
       window.socket.emit( "CreatedCanvas", { "Width": canvas.width, "Height": canvas.height, "Context": ctx, "Id": window.gameId } )
    }
-}
 
 function SetClientCanvas ( width, height )
 {
@@ -91,17 +159,17 @@ function backWarn () { window.onbeforeunload = function () { return "Data will b
 
 function startDraw ()
 {
+   isSaved = false;
    isDrawing = true;
-   console.log( isDrawing )
+   console.log(brushColor)
+   console.log(brushType)
 }
 function endDraw ()
 {
    isDrawing = false;
-   console.log( isDrawing )
 }
 
-canvas.addEventListener( 'mousemove', ( e ) =>
-{
+canvas.addEventListener('mousemove', (e) =>{
    const rect = canvas.getBoundingClientRect();
 
    const scaleX = canvas.width / rect.width;
@@ -125,19 +193,19 @@ canvas.addEventListener( "mouseup", ( e ) =>
    ForceSyncBoard();
 } );
 
-
-function draw ( x, y )
-{
-   canvas = document.getElementById( 'myCanvas' );
-   let ctx = canvas.getContext( '2d' );
+function draw (x, y) {
+   canvas = document.getElementById('myCanvas');
+   let ctx = canvas.getContext('2d');
    syncColor();
+   if(!isDrawing){ return; }
+   // console.log(x,y);
 
-   drawPencil( x, y, brushSize, brushColor )
-
-   if ( !IsSinglePlayerSession() )
-   {
-      AddClientData( x, y, brushSize, brushColor )
+   if(brushType == "brush"){
+      drawPencil(x,y,brushSize,brushColor);
    }
+   else if (brushType == 'e'){ 
+      erase(x,y,brushSize,"#ffffff");
+   }   
 };
 
 function drawPencil ( x, y, rad, color )
@@ -146,7 +214,25 @@ function drawPencil ( x, y, rad, color )
    ctx.arc( x, y, rad, 0, Math.PI * 2 );
    ctx.fillStyle = color;
    ctx.fill();
-   ctx.stroke();
+   ctx.closePath();
+   /* 
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(e.offsetX, e.offsetY);
+       ctx.strokeStyle = '#000'; // Brush color
+       ctx.lineWidth = 5;         // Brush size
+       ctx.lineCap = 'round';     // Makes ends smooth
+       ctx.stroke();
+       [lastX, lastY] = [e.offsetX, e.offsetY]; 
+   */
+}
+
+
+function erase(x,y,rad, color){
+   ctx.beginPath();
+   ctx.arc(x,y,rad,0,Math.PI * 2);
+   ctx.fillStyle = color;
+   ctx.fill();
+   // ctx.stroke();
    ctx.closePath();
 }
 
@@ -168,40 +254,34 @@ function syncBrushSize ( el1, el2 )
    brushSize = el_2.value;
 }
 
-function setBrush ()
-{
+function setBrush(){
+   if(brushType != 'brush'){
+      b.classList.add('active-brush');
+      e.classList.remove('active-brush');
+      p.classList.remove('active-brush');
+      // t.classList.remove('active-brush');
+      // c.classList.remove('active-brush');
+      // s.classList.remove('active-brush');  
+   }
    brushType = 'brush';
 }
 
-function setErase ()
-{
-   brushType = 'eraser'
+function setErase(){
+   if(brushType != 'e'){
+      b.classList.remove('active-brush');
+      e.classList.add('active-brush');
+      p.classList.remove('active-brush');
+      // t.classList.remove('active-brush');
+      // c.classList.remove('active-brush');
+      // s.classList.remove('active-brush');  
+   }
+   brushType = 'e';
 }
 
 function setPan ()
 {
    brushType = 'pan';
 }
-
-function setTri ()
-{
-   brushType = 'tri';
-}
-
-function setSquare ()
-{
-   brushType = 'sqr';
-}
-
-function setCircle ()
-{
-   brushType = 'circ';
-}
-
-
-
-
-/* Canvas Js End*/
 
 function swapWidthHeight ()
 {
@@ -369,4 +449,30 @@ function unitConversion ( el )
       }
    }
    getprevUnit( el )
+}
+
+
+
+
+// Put Roster info in here //
+
+ function fillRoster(name){
+
+   container = document.getElementById('ploingus');
+   if(container){
+      console.log('exists')
+   }
+   newTag = document.createElement('div')
+   newTag.id = name
+   newTag.classList.add('player-list')
+   newTag.innerText = name 
+
+   if(newTag){
+      console.log('new exists')
+   }
+
+
+   container.appendChild(newTag);
+   // targetDiv.appendChild(newPara);
+
 }
