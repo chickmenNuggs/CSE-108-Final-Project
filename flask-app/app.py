@@ -94,11 +94,19 @@ def saved():
 def settings():
     return render_template('settings.html')
 
+
+@app.route("/logout/")
+@login_required
+def logout():
+    from flask_login import logout_user
+    logout_user()
+    session.clear()
+    return redirect(url_for("login"))
+
 with app.app_context():
     db.create_all()
 
 
 if __name__ == "__main__":
     print("[}----------- [Running app.py] ---------------{]")
-    socketio.run(app);
-    app.run(debug=True);
+    socketio.run(app, debug=True)
