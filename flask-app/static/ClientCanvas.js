@@ -1,4 +1,4 @@
-const playerList = document.getElementsByClassName( "player-list" )[ 0 ];
+const container = document.getElementById( 'ploingus' );
 
 let clientDataList = [];
 
@@ -25,46 +25,62 @@ function SendLobbyData ()
 
 window.socket.on( "LobbyData", ( data ) =>
 {
+   console.log( data );
    if ( IsSinglePlayerSession() ) return;
 
-   LogCurrentWebsocketEvent( "Get Lobby Data", `Recieved lobby data for lobby: ${ data.Id }` )
+   LogCurrentWebsocketEvent( "Get Lobby Data", `Recieved lobby data for lobby: ${ data.Id }` );
    UpdatePlayerList( data.Players );
-
-   console.log( data.Players );
-   console.log( IsHost( data.Players[ 0 ] ) );
-
-   if ( IsHost( data.Players[ 0 ] ) )
-   {
-      window.socket.emit( "SyncBoardOnLateJoin", { "Canvas": canvas.toDataURL(), "Id": window.gameId } );
-   }
 } );
 
-window.socket.on( "SyncBoardOnLateJoin", ( canvas ) =>
+
+window.socket.on( "Error", ( data ) => 
+{
+   LogCurrentWebsocketEvent( "Error", data.message );
+} );
+
+window.socket.on( "SyncBoardOnLateJoin", async ( buffer ) =>
 {
    if ( IsSinglePlayerSession() ) return;
 
-   LogCurrentWebsocketEvent( "SyncBoardOnLateJoin", "Sending canvas data over" );
-   const img = new Image();
-   img.src = canvas;
-   img.onload = () =>
-   {
-      ctx.drawImage( img, 0, 0 );
-   };
+   LogCurrentWebsocketEvent( "SyncBoardOnLateJoin", "Receiving canvas buffer" );
+
+   const blob = new Blob( [ buffer ], { type: "image/webp" } );
+   const bitmap = await createImageBitmap( blob );
+
+   ctx.clearRect( 0, 0, canvas.width, canvas.height );
+   ctx.drawImage( bitmap, 0, 0 );
+
+   bitmap.close();
 } );
 
-window.socket.on( "SetClientCanvas", ( data ) =>
+
+window.socket.on( "SetClientCanvas", async ( data ) =>
 {
    if ( IsSinglePlayerSession() ) return;
-
    // first index is always the host.
-   if ( IsHost( data.Players[ 0 ] ) ) return;
-
    let width = data.Canvas.Width;
    let height = data.Canvas.Height;
+
    LogCurrentWebsocketEvent( "SetClientCanvas", `Client "${ window.localUserName }" is creating canvas with width "${ width }" and height "${ height }" from host.` );
    SetClientCanvas( width, height );
 
+   if ( data.Canvas && data.Canvas.Data )
+   {
+      await LoadBoardFromBuffer( data.Canvas.Data );
+   }
 } );
+
+async function LoadBoardFromBuffer ( buffer )
+{
+   LogCurrentWebsocketEvent( "LoadBoardFromBuffer", "Drawing canvas buffer for late join." );
+   const blob = new Blob( [ buffer ], { type: "image/webp" } );
+   const bitmap = await createImageBitmap( blob );
+
+   ctx.clearRect( 0, 0, canvas.width, canvas.height );
+   ctx.drawImage( bitmap, 0, 0 );
+
+   bitmap.close();
+}
 
 
 
@@ -86,6 +102,7 @@ window.socket.on( "SyncBoard", ( data ) =>
    {
       drawPencil( board.point.x, board.point.y, board.brushSize, board.brushColor )
    }
+
 } );
 
 window.onbeforeunload = function ()
@@ -106,16 +123,10 @@ function IsHost ( host )
 
 function UpdatePlayerList ( players )
 {
-   playerList.innerHTML = "";
+   container.innerHTML = "";
    players.forEach( player =>
    {
-      const playerDiv = document.createElement( "div" );
-      playerDiv.textContent = player;
-      if ( player === window.localUserName )
-      {
-         playerDiv.textContent += " (You)";
-      }
-      playerList.appendChild( playerDiv );
+      fillRoster( player );
    } );
 }
 
@@ -159,11 +170,30 @@ function AddClientData ( x, y, brushSize, brushColor )
    clientDataList.push( new ClientData( new Vector( x, y ), brushSize, brushColor ) )
 }
 
+let syncTimer = null;
+
 function ForceSyncBoard ()
 {
    if ( IsSinglePlayerSession() ) return;
 
    UpdateGameState();
+
+   // Basically if we let go of the mouse it will start a one second timer and if we draw again it will reset
+   // the timer and when we stop drawing for one second it will call finally update our snapshot.
+   clearTimeout( syncTimer );
+   syncTimer = setTimeout( () =>
+   {
+      canvas.toBlob( ( blob ) =>
+      {
+         blob.arrayBuffer().then( ( buffer ) =>
+         {
+            window.socket.emit( "UpdateSeverCanvas", { Id: window.gameId, Canvas: buffer } );
+         } );
+      }, "image/webp", 0.8 );
+
+      console.log( "After one second we are saving snapshot" );
+   }, 1000 );
+
 
    clientDataList = [];
 }

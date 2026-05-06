@@ -1,110 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/master.css">
-    <title>Document</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../static/master.css">
+   <title>Document</title>
 </head>
+
 <body>
-    <div class = background>
-        <div class = container>
-            <div class = action-bar>
-                <a class="action-buttons" onclick="showMenu()" id = "revelator">Canvas</a>
-                <div class = 'file-deets hidden' id = files>
-                    <a class = 'file-buttons' onclick="newCanvas()">New</a>
-                    <a class = 'file-buttons' >Save</a>
-                    <a class = 'file-buttons' >Export</a>
-                    <a class = 'file-buttons' onclick="clearCanvas()">Clear</a>
-                </div>
-                <a class="action-buttons" href="{{url_for('home')}}" onclick="backWarn()">Home</a>
-
+   <div class=background>
+      <div class=container>
+         <div class=action-bar>
+            <a class="action-buttons" onclick="showMenu()" id="revelator">Canvas</a>
+            <div class='file-deets hidden' id=files>
+               <a class='file-buttons' onclick="newCanvas()">New</a>
+               <a class='file-buttons'>Save</a>
+               <a class='file-buttons'>Export</a>
+               <a class='file-buttons' onclick="clearCanvas()">Clear</a>
             </div>
-            <div class = "wide-div">
-                <div class = tool-bar>
-                    <div class="color-selector">
-                        
-                    </div>
-                    <div class = selected-color>
-                        <label for ="selected-color"> Hex :</label>
-                        <input id = "selected-color" type = "text" value = "#000000" onchange="syncColor()"> 
-                    </div>
-                    <div class = brush-settings>
-                        <div class="brush-size">
-                            <input type="range" value="10" class= slider id = brush-range oninput="syncBrushSize('brush-range', 'brush-num')">
-                            <input type="number" id = brush-num min="1" max="100" step="1" value="10" oninput="syncBrushSize('brush-num', 'brush-range')">
-                        </div>
-                        <div class="brush-shape">
-                              
-                              <button id ="e-pan" onclick="setPan()" class = 'brush-buttons'>
-                                 Pan Screen
-                              </button>
-                              <button id = "brush"  onclick="setBrush()" class = 'brush-buttons active-brush' >
-                                 Brush
-                              </button>
-                              <button id = "eraser" onclick="setErase()" class = 'brush-buttons'>
-                                 Eraser
-                              </button>
-                        </div>
-                    </div>
-                    <div class = neo-roster>
-                        <div class = header>
-                            <div id = l>
-                                Player Roster
-                            </div>
-                            <div id = 'r'>
-                                1/4
-                            </div>
-                        </div>
-                        <div id = ploingus>
-                           <div class = player-list id = host> Host</div>
+            <a class="action-buttons" href="{{url_for('home')}}" onclick="backWarn()">Home</a>
 
-                        </div>
+         </div>
+         <div class="wide-div">
+            <div class=tool-bar>
+               <div class="color-selector">
+
+               </div>
+               <div class=selected-color>
+                  <label for="selected-color"> Hex :</label>
+                  <input id="selected-color" type="text" value="#000000" onchange="syncColor()">
+               </div>
+               <div class=brush-settings>
+                  <div class="brush-size">
+                     <input type="range" value="10" class=slider id=brush-range
+                        oninput="syncBrushSize('brush-range', 'brush-num')">
+                     <input type="number" id=brush-num min="1" max="100" step="1" value="10"
+                        oninput="syncBrushSize('brush-num', 'brush-range')">
+                  </div>
+                  <div class="brush-shape">
+
+                     <button id="e-pan" onclick="setPan()" class='brush-buttons'>
+                        Pan Screen
+                     </button>
+                     <button id="brush" onclick="setBrush()" class='brush-buttons active-brush'>
+                        Brush
+                     </button>
+                     <button id="eraser" onclick="setErase()" class='brush-buttons'>
+                        Eraser
+                     </button>
+                  </div>
+               </div>
+               <div class=neo-roster>
+                  <div class=header>
+                     <div id=l>
+                        Player Roster
                      </div>
-                </div>
-                <div class = canvas-holder>
-                    <div class = "create-new">
-                        <table id = create-holder>
-                            <tr>
-                                <td>
-                                    <label  class="create-input" for="width">Width : </label>
-                                    <input  class="create-input" id="width" value="7015">
-                                    <select class="create-input" name="width" id="w-measure" onclick="getprevUnit('w-measure')" onchange="unitConversion('w-measure')">
-                                        <option value="px">px</option>
-                                        <option value="cm">cm</option>
-                                        <option value="in">in</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label  class="create-input" for="height">Height : </label>
-                                    <input  class="create-input" id="height" value="4960">
-                                    <select class="create-input" name="height" id="h-measure" onfocus="getprevUnit('h-measure')" onchange="unitConversion('h-measure')">
-                                        <option value="px">px</option>
-                                        <option value="cm">cm</option>
-                                        <option value="in">in</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                     <button class="create-input" onclick="swapWidthHeight()"> Swap Width and Height</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button class="create-input" onclick="canvasInit()"> Create Canvas </button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>       
-                    <canvas id="myCanvas" class="hidden" onmousedown="startDraw()" onmouseup="endDraw()" onmousemove="draw()">
-                        Your browser does not support the Canvas element :&#40
-                    </canvas>
+                     <div id='r'>
+                        1/4
+                     </div>
+                  </div>
+                  <div id=ploingus>
+                     <div class=player-list id=host> Host</div>
+
+                  </div>
                </div>
             </div>
-          
+            <div class=canvas-holder>
+               <div class="create-new">
+                  <table id=create-holder>
+                     <tr>
+                        <td>
+                           <label class="create-input" for="width">Width : </label>
+                           <input class="create-input" id="width" value="7015">
+                           <select class="create-input" name="width" id="w-measure" onclick="getprevUnit('w-measure')"
+                              onchange="unitConversion('w-measure')">
+                              <option value="px">px</option>
+                              <option value="cm">cm</option>
+                              <option value="in">in</option>
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <label class="create-input" for="height">Height : </label>
+                           <input class="create-input" id="height" value="4960">
+                           <select class="create-input" name="height" id="h-measure" onfocus="getprevUnit('h-measure')"
+                              onchange="unitConversion('h-measure')">
+                              <option value="px">px</option>
+                              <option value="cm">cm</option>
+                              <option value="in">in</option>
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <button class="create-input" onclick="swapWidthHeight()"> Swap Width and Height</button>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <button class="create-input" onclick="canvasInit()"> Create Canvas </button>
+                        </td>
+                     </tr>
+                  </table>
+               </div>
+               <canvas id="myCanvas" class="hidden" onmousedown="startDraw()" onmouseup="endDraw()">
+                  Your browser does not support the Canvas element :&#40
+               </canvas>
+            </div>
+         </div>
+
       </div>
    </div>
    <script>

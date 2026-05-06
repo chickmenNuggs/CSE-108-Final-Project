@@ -12,69 +12,75 @@ let isShowing = false;
 var x, y;
 
 
-canvas = document.getElementById('myCanvas');
-ctx = canvas.getContext('2d')
-create = document.getElementsByClassName('create-new')[0];
-w = document.getElementById('width');
-h = document.getElementById('height');         
-width = document.getElementById('w-measure');
-height = document.getElementById('h-measure');
-   b = document.getElementById('brush');
-   e = document.getElementById('eraser');
-   p = document.getElementById('e-pan');
- 
-window.addEventListener('load', (event) => {
-   syncBrushSize()
-   syncColor()
-   brushType = 'brush'
-});
+canvas = document.getElementById( 'myCanvas' );
+ctx = canvas.getContext( '2d' )
+create = document.getElementsByClassName( 'create-new' )[ 0 ];
+w = document.getElementById( 'width' );
+h = document.getElementById( 'height' );
+width = document.getElementById( 'w-measure' );
+height = document.getElementById( 'h-measure' );
+b = document.getElementById( 'brush' );
+e = document.getElementById( 'eraser' );
+p = document.getElementById( 'e-pan' );
 
-document.addEventListener('click', (event) => {
-   if(isShowing == false){
+
+document.addEventListener( 'click', ( event ) =>
+{
+   if ( isShowing == false )
+   {
       hideMenu();
    }
    isShowing = false;
-});
+} );
 
 
-function showMenu(){
+function showMenu ()
+{
    isShowing = true;
-   menu = document.getElementById('files');
-   files.classList.remove('hidden')
+   menu = document.getElementById( 'files' );
+   files.classList.remove( 'hidden' )
 }
 
-function hideMenu(){
-   menu = document.getElementById('files');
-   files.classList.add('hidden')
+function hideMenu ()
+{
+   menu = document.getElementById( 'files' );
+   files.classList.add( 'hidden' )
 }
 
 
-function clearCanvas(){
-   ctx.clearRect(0, 0, canvas.width, canvas.height)
+function clearCanvas ()
+{
+   ctx.clearRect( 0, 0, canvas.width, canvas.height )
    hideMenu();
 }
 
-function newCanvas(){
-   if(isSaved == false){
+function newCanvas ()
+{
+   if ( isSaved == false )
+   {
       backWarn();
    }
    clearCanvas()
-   canvas.classList.add('hidden') 
-   create.classList.remove('hidden')
+   canvas.classList.add( 'hidden' )
+   create.classList.remove( 'hidden' )
 }
 
-function saveCanvas(){
+function saveCanvas ()
+{
 
 }
 
-function exportCanvas(){
-   
-}
-
-function zoomIn(){
+function exportCanvas ()
+{
 
 }
-function zoomOut(){
+
+function zoomIn ()
+{
+
+}
+function zoomOut ()
+{
 
 }
 
@@ -122,29 +128,31 @@ function canvasInit ()
       canvas.height = h.value
    }
 
-   create.classList.add('hidden');
-   canvas.classList.remove('hidden');
+   create.classList.add( 'hidden' );
+   canvas.classList.remove( 'hidden' );
    brushColor = '#000000';
    brushType = 'brush';
    brushSize = 10;
-
-   window.onbeforeunload = function() {
-   return "Data will be lost if you leave the page, are you sure?";
-};
-}
-
-function backWarn(){ window.onbeforeunload = function() { return "Data will be lost if you leave the page, are you sure?"; }; }
 
    window.onbeforeunload = function ()
    {
       return "Data will be lost if you leave the page, are you sure?";
    };
 
+   // Don't move this
    if ( !IsSinglePlayerSession() )
    {
       LogCurrentWebsocketEvent( "Canvas Created", `Updating canvas information for lobby "${ window.gameId }"` )
       window.socket.emit( "CreatedCanvas", { "Width": canvas.width, "Height": canvas.height, "Context": ctx, "Id": window.gameId } )
    }
+}
+
+function backWarn () { window.onbeforeunload = function () { return "Data will be lost if you leave the page, are you sure?"; }; }
+
+window.onbeforeunload = function ()
+{
+   return "Data will be lost if you leave the page, are you sure?";
+};
 
 function SetClientCanvas ( width, height )
 {
@@ -161,15 +169,16 @@ function startDraw ()
 {
    isSaved = false;
    isDrawing = true;
-   console.log(brushColor)
-   console.log(brushType)
+   console.log( brushColor )
+   console.log( brushType )
 }
 function endDraw ()
 {
    isDrawing = false;
 }
 
-canvas.addEventListener('mousemove', (e) =>{
+canvas.addEventListener( 'mousemove', ( e ) =>
+{
    const rect = canvas.getBoundingClientRect();
 
    const scaleX = canvas.width / rect.width;
@@ -193,19 +202,23 @@ canvas.addEventListener( "mouseup", ( e ) =>
    ForceSyncBoard();
 } );
 
-function draw (x, y) {
-   canvas = document.getElementById('myCanvas');
-   let ctx = canvas.getContext('2d');
+function draw ( x, y )
+{
+   canvas = document.getElementById( 'myCanvas' );
+   let ctx = canvas.getContext( '2d' );
    syncColor();
-   if(!isDrawing){ return; }
    // console.log(x,y);
 
-   if(brushType == "brush"){
-      drawPencil(x,y,brushSize,brushColor);
+   if ( brushType == "brush" )
+   {
+      drawPencil( x, y, brushSize, brushColor );
+      AddClientData( x, y, brushSize, brushColor );
    }
-   else if (brushType == 'e'){ 
-      erase(x,y,brushSize,"#ffffff");
-   }   
+   else if ( brushType == 'e' )
+   {
+      drawPencil( x, y, brushSize, "#ffffff" );
+      AddClientData( x, y, brushSize, "#ffffff" );
+   }
 };
 
 function drawPencil ( x, y, rad, color )
@@ -227,15 +240,6 @@ function drawPencil ( x, y, rad, color )
 }
 
 
-function erase(x,y,rad, color){
-   ctx.beginPath();
-   ctx.arc(x,y,rad,0,Math.PI * 2);
-   ctx.fillStyle = color;
-   ctx.fill();
-   // ctx.stroke();
-   ctx.closePath();
-}
-
 /* Color Selecter Js*/
 
 /* Color Selecter Js End*/
@@ -254,11 +258,29 @@ function syncBrushSize ( el1, el2 )
    brushSize = el_2.value;
 }
 
-function setBrush(){
-   if(brushType != 'brush'){
-      b.classList.add('active-brush');
-      e.classList.remove('active-brush');
-      p.classList.remove('active-brush');
+window.addEventListener( 'load', ( event ) =>
+{
+   console.log( "Setting brush type" );
+   brushType = 'brush';
+   //syncBrushSize()
+   syncColor()
+} );
+
+window.onload = function ()
+{
+   console.log( "Setting brush type" );
+   brushType = 'brush';
+   //syncBrushSize()
+   syncColor()
+}
+
+function setBrush ()
+{
+   if ( brushType != 'brush' )
+   {
+      b.classList.add( 'active-brush' );
+      e.classList.remove( 'active-brush' );
+      p.classList.remove( 'active-brush' );
       // t.classList.remove('active-brush');
       // c.classList.remove('active-brush');
       // s.classList.remove('active-brush');  
@@ -266,11 +288,13 @@ function setBrush(){
    brushType = 'brush';
 }
 
-function setErase(){
-   if(brushType != 'e'){
-      b.classList.remove('active-brush');
-      e.classList.add('active-brush');
-      p.classList.remove('active-brush');
+function setErase ()
+{
+   if ( brushType != 'e' )
+   {
+      b.classList.remove( 'active-brush' );
+      e.classList.add( 'active-brush' );
+      p.classList.remove( 'active-brush' );
       // t.classList.remove('active-brush');
       // c.classList.remove('active-brush');
       // s.classList.remove('active-brush');  
@@ -456,23 +480,25 @@ function unitConversion ( el )
 
 // Put Roster info in here //
 
- function fillRoster(name){
+function fillRoster ( name )
+{
 
-   container = document.getElementById('ploingus');
-   if(container){
-      console.log('exists')
+   if ( container )
+   {
+      console.log( 'exists' )
    }
-   newTag = document.createElement('div')
+   newTag = document.createElement( 'div' )
    newTag.id = name
-   newTag.classList.add('player-list')
-   newTag.innerText = name 
+   newTag.classList.add( 'player-list' )
+   newTag.innerText = name
 
-   if(newTag){
-      console.log('new exists')
+   if ( newTag )
+   {
+      console.log( 'new exists' )
    }
 
 
-   container.appendChild(newTag);
+   container.appendChild( newTag );
    // targetDiv.appendChild(newPara);
 
 }
