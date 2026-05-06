@@ -72,6 +72,7 @@ def JoinLobby(data):
 
 @socketio.on(UPDATE_GAME_STATE)
 def UpdateGameState(data):
+    
     lobbyId = data.get("Id")
 
     lobby = lobbies.get(lobbyId)
@@ -85,7 +86,6 @@ def UpdateGameState(data):
 
 @socketio.on("SyncBoardOnLateJoin")
 def SyncBoardOnLateConnect(data):
-    
     lobbyId = data.get("Id")
 
     if not lobbyId:

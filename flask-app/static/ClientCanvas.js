@@ -16,6 +16,8 @@ if ( !IsSinglePlayerSession() )
 
 function SendLobbyData ()
 {
+   if ( IsSinglePlayerSession() ) return;
+
    LogCurrentWebsocketEvent( "Client connected", "Client has connected" );
    window.socket.emit( "ClientConnected", { "Id": window.gameId, "User": window.localUserName } )
 }
@@ -23,6 +25,8 @@ function SendLobbyData ()
 
 window.socket.on( "LobbyData", ( data ) =>
 {
+   if ( IsSinglePlayerSession() ) return;
+
    LogCurrentWebsocketEvent( "Get Lobby Data", `Recieved lobby data for lobby: ${ data.Id }` )
    UpdatePlayerList( data.Players );
 
@@ -37,6 +41,8 @@ window.socket.on( "LobbyData", ( data ) =>
 
 window.socket.on( "SyncBoardOnLateJoin", ( canvas ) =>
 {
+   if ( IsSinglePlayerSession() ) return;
+
    LogCurrentWebsocketEvent( "SyncBoardOnLateJoin", "Sending canvas data over" );
    const img = new Image();
    img.src = canvas;
@@ -48,6 +54,8 @@ window.socket.on( "SyncBoardOnLateJoin", ( canvas ) =>
 
 window.socket.on( "SetClientCanvas", ( data ) =>
 {
+   if ( IsSinglePlayerSession() ) return;
+
    // first index is always the host.
    if ( IsHost( data.Players[ 0 ] ) ) return;
 
@@ -62,12 +70,17 @@ window.socket.on( "SetClientCanvas", ( data ) =>
 
 window.socket.on( "Redirect", ( data ) =>
 {
+   if ( IsSinglePlayerSession() ) return;
+
+   LogCurrentWebsocketEvent( "Redirect", "redirecting user back to lobby." );
    window.location.href = data.Url;
 } );
 
 
 window.socket.on( "SyncBoard", ( data ) =>
 {
+   if ( IsSinglePlayerSession() ) return;
+
    LogCurrentWebsocketEvent( "Sync Board", `Syncing current board state to every client.` )
    for ( const board of data )
    {
@@ -136,6 +149,8 @@ const CLIENT_DATA_THRESHOLD = 10
 
 function AddClientData ( x, y, brushSize, brushColor )
 {
+   if ( IsSinglePlayerSession() ) return;
+
    if ( clientDataList.length >= CLIENT_DATA_THRESHOLD )
    {
       UpdateGameState();
@@ -146,6 +161,8 @@ function AddClientData ( x, y, brushSize, brushColor )
 
 function ForceSyncBoard ()
 {
+   if ( IsSinglePlayerSession() ) return;
+
    UpdateGameState();
 
    clientDataList = [];
