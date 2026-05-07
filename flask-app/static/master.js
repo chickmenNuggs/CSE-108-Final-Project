@@ -208,8 +208,9 @@ canvas.addEventListener( 'mousemove', ( e ) =>
    y = Math.round( y );
 
    ctx.beginPath();
-   // draw( x, y, e );
+
    drawkill( x, y, brushSize, brushColor )
+
    AddClientData( x, y, lastX, lastY, ctx.lineWidth, ctx.strokeStyle );
    [ lastX, lastY ] = [ x, y ];
 } )
