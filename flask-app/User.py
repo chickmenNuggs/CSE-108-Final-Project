@@ -12,6 +12,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200), nullable=False)
 
 def GetUserFromName(username):
+   if not username:
+      return None
    return User.query.filter_by(username=username).first()
 
 def GetUser(userID):

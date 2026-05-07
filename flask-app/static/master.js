@@ -22,50 +22,54 @@ height = document.getElementById( 'h-measure' );
 b = document.getElementById( 'brush' );
 e = document.getElementById( 'eraser' );
 p = document.getElementById( 'e-pan' );
-exp = document.getElementById('expMenu');
+exp = document.getElementById( 'expMenu' );
 let lastX, lastY;
 
-/*Drop Down Menu Start*/ 
-   function showMenu ()
-   {
-      isShowing = true;
-      menu = document.getElementById( 'files' );
-      files.classList.remove( 'hidden' )
-   }
+/*Drop Down Menu Start*/
+function showMenu ()
+{
+   isShowing = true;
+   menu = document.getElementById( 'files' );
+   files.classList.remove( 'hidden' )
+}
 
-   function hideMenu ()
-   {
-      menu = document.getElementById( 'files' );
-      files.classList.add( 'hidden' )
-   }
+function hideMenu ()
+{
+   menu = document.getElementById( 'files' );
+   files.classList.add( 'hidden' )
+}
 
-   document.addEventListener( 'click', ( event ) =>
-   {
-      menu = document.getElementById( 'files' );
-      clicker = document.getElementById('revelator')
-      if ( menu.matches(':hover') || clicker.matches(':hover')) {return;}
-      hideMenu();
-   } );
-/*Drop Down Menu End*/ 
+document.addEventListener( 'click', ( event ) =>
+{
+   menu = document.getElementById( 'files' );
+   clicker = document.getElementById( 'revelator' )
+   if ( menu.matches( ':hover' ) || clicker.matches( ':hover' ) ) { return; }
+   hideMenu();
+} );
+/*Drop Down Menu End*/
 
 
 
 /* Save / Export Code Start*/
 
-exp.addEventListener('click', ( event )=> {
-   emenu = document.getElementsByClassName('exportBin')[0];
-   if(emenu.matches(":hover")){
+exp.addEventListener( 'click', ( event ) =>
+{
+   emenu = document.getElementsByClassName( 'exportBin' )[ 0 ];
+   if ( emenu.matches( ":hover" ) )
+   {
       return;
    }
    hideExp()
-})
+} )
 
-function showExp(){
-   exp.classList.remove('hidden');
+function showExp ()
+{
+   exp.classList.remove( 'hidden' );
    hideMenu();
 }
-function hideExp(){
-   exp.classList.add('hidden');
+function hideExp ()
+{
+   exp.classList.add( 'hidden' );
 }
 
 function saveCanvas ()
@@ -175,89 +179,90 @@ function newCanvas ()
 
 
 // Begin Drawing
-canvas.addEventListener('mousedown', (e) => {
+canvas.addEventListener( 'mousedown', ( e ) =>
+{
    isDrawing = true;
-   [lastX, lastY] = [e.offsetX, e.offsetY];
+   [ lastX, lastY ] = [ e.offsetX, e.offsetY ];
 
-})
+} )
 // Moving Brush
 canvas.addEventListener( 'mousemove', ( e ) =>
+{
+   //Making sure person is trying to draw
+
+   if ( !isDrawing ) return;
+
+   // syncBrushSize();
+   // syncColor();
+   //getting bounds for canvas
+   const rect = canvas.getBoundingClientRect();
+   const scaleX = canvas.width / rect.width;
+   const scaleY = canvas.height / rect.height;
+
+
+   x = ( e.clientX - rect.left ) * scaleX;
+   y = ( e.clientY - rect.top ) * scaleY;
+
+
+   x = Math.round( x );
+   y = Math.round( y );
+
+   ctx.beginPath();
+
+   drawkill( x, y, brushSize, brushColor )
+
+   AddClientData( x, y, lastX, lastY, ctx.lineWidth, ctx.strokeStyle );
+   [ lastX, lastY ] = [ x, y ];
+} )
+
+
+function drawkill ( x, y, width, color )
+{
+   ctx.beginPath();
+   ctx.moveTo( lastX, lastY );
+   ctx.lineTo( x, y );
+
+   if ( brushType == "brush" )
    {
-      //Making sure person is trying to draw
-      if(!isDrawing){
-         return;
-      }
-      // syncBrushSize();
-      // syncColor();
-      //getting bounds for canvas
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      
-   
-      x = ( e.clientX - rect.left ) * scaleX;
-      y = ( e.clientY - rect.top ) * scaleY;
-      
-      
-      x = Math.round( x );
-      y = Math.round( y );
-      
-      //actually starting drawing
-      if ( isDrawing )
-         {
-            ctx.beginPath();
-            // draw( x, y, e );
-            drawkill(e, x, y)
-         }
-      } )
-   
-      // Showing Brush
-      function drawkill(e,x,y ){
-         if(!isDrawing) return;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
 
-         ctx.beginPath();
-         ctx.moveTo(lastX, lastY);
-         ctx.lineTo(x, y);
+      ctx.stroke();
+   }
+   else if ( brushType == 'e' )
+   {
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = width;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
 
-         if(brushType == "brush"){
-            ctx.strokeStyle = brushColor;
-            ctx.lineWidth = brushSize;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
+      ctx.stroke();
+   }
 
-            ctx.stroke();
+   if ( brushType == 'pan' )
+   {
+      alert( 'Pan tool is not yet implemented' );
+   }
+}
+// End Brush
 
-            [lastX, lastY] = [x, y];
-         }
-         else if(brushType == 'e'){
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = brushSize;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
+canvas.addEventListener( 'mouseup', ( e ) =>
+{
+   ctx.beginPath();
+   ForceSyncBoard();
+   isDrawing = false;
+} )
 
-            ctx.stroke();
+canvas.addEventListener( 'mouseout', ( e ) =>
+{
+   ctx.beginPath();
+   isDrawing = false;
+} )
 
-            [lastX, lastY] = [x, y];
-         }
-          if (brushType == 'pan'){
-            alert('Pan tool is not yet implemented');
-         }
-      }
-      // End Brush
-      
-      canvas.addEventListener('mouseup', (e) =>{
-         ctx.beginPath();
-         ForceSyncBoard();
-         isDrawing = false;
-      })
-      
-      canvas.addEventListener('mouseout', (e)=> {
-         ctx.beginPath();
-         isDrawing = false;
-      })
-      
-      
-      // For Syncing? Idk some websocket stuff.
+
+// For Syncing? Idk some websocket stuff.
 
 canvas.addEventListener( "mouseup", ( e ) =>
 {
@@ -299,28 +304,34 @@ window.addEventListener(onload ,(event)=>{
 
 /* Color Selecter Js End*/
 
-/* Misc Helper functions*/ 
+/* Misc Helper functions*/
 
 
-window.addEventListener('keypress', (event) =>{
-   if(event.key == 'c'){
+window.addEventListener( 'keypress', ( event ) =>
+{
+   if ( event.key == 'c' )
+   {
       showMenu();
    }
-   else if(event.key == 'h'){
-      home = document.getElementById('home');
+   else if ( event.key == 'h' )
+   {
+      home = document.getElementById( 'home' );
       home.click();
    }
-   else if(event.key == 'b'){
+   else if ( event.key == 'b' )
+   {
       setBrush();
    }
-   else if (event.key == 'e'){
+   else if ( event.key == 'e' )
+   {
       setErase();
    }
-   else if(event.key == 'p'){
+   else if ( event.key == 'p' )
+   {
       setPan();
    }
 
-})
+} )
 
 
 function syncColor ()
@@ -367,7 +378,8 @@ function setErase ()
 
 function setPan ()
 {
-   if(brushType != 'pan'){
+   if ( brushType != 'pan' )
+   {
       b.classList.remove( 'active-brush' );
       e.classList.remove( 'active-brush' );
       p.classList.add( 'active-brush' );
@@ -551,7 +563,7 @@ function zoomOut ()
 }
 
 
-/* Misc Helper functions end */ 
+/* Misc Helper functions end */
 
 
 // Put Roster info in here //

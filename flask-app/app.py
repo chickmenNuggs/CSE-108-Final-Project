@@ -1,6 +1,8 @@
 from flask import Flask, redirect, render_template, request, url_for, session
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager, login_required, current_user
+from User import GetUserFromName
 from server import socketio
+
 # Custom user python file
 from User import GetUser, TryToRegister, LoggedInSucessfully
 
@@ -79,10 +81,64 @@ def canvas(gameId):
 def lobby():
     return render_template("lobby.html", LOBBY_LIST=LOBBY_LIST,CREATE_LOBBY=CREATE_LOBBY, VIEW_LOBBIES=VIEW_LOBBIES, JOIN_LOBBY=JOIN_LOBBY, localUserName=session["user"])
 
-@app.route("/profile/")
+@app.route("/profile/", methods=["GET", "POST"])
 @login_required
 def profile():
-    return render_template('profile.html')
+    from flask_login import current_user
+    message = request.args.get('message', '')
+    error = request.args.get('error', '')
+    return render_template('profile.html', message=message or error, error=bool(error))
+
+@app.route("/change-username/", methods=["POST"])
+@login_required
+def change_username():
+    
+    newUsername = request.form.get("NewUsername", "").strip()
+    
+    if not newUsername:
+        return redirect(url_for("profile", error="Username cannot be empty"))
+    
+    if len(newUsername) < 3:
+        return redirect(url_for("profile", error="Username must be at least 3 characters"))
+    
+    if GetUserFromName(newUsername):
+        return redirect(url_for("profile", error="Username already exists"))
+    
+    current_user.username = newUsername
+    db.session.commit()
+    session["user"] = newUsername
+    
+    return redirect(url_for("profile", message="Username changed successfully"))
+
+@app.route("/change-password/", methods=["POST"])
+@login_required
+def change_password():
+    from flask_login import current_user
+    from werkzeug.security import check_password_hash, generate_password_hash
+    
+    currentPassword = request.form.get("CurrentPassword", "")
+    newPassword = request.form.get("NewPassword", "")
+    confirmPassword = request.form.get("ConfirmPassword", "")
+    
+    if not check_password_hash(current_user.password, currentPassword):
+        return redirect(url_for("profile", error="Current password is incorrect"))
+    
+    if not newPassword:
+        return redirect(url_for("profile", error="New password cannot be empty"))
+    
+    if len(newPassword) < 6:
+        return redirect(url_for("profile", error="Password must be at least 6 characters"))
+    
+    if newPassword != confirmPassword:
+        return redirect(url_for("profile", error="Passwords do not match"))
+    
+    if newPassword == currentPassword:
+        return redirect(url_for("profile", error="New password must be different from current password"))
+    
+    current_user.password = generate_password_hash(newPassword)
+    db.session.commit()
+    
+    return redirect(url_for("profile", message="Password changed successfully"))
 
 @app.route("/saved/")
 @login_required
