@@ -221,54 +221,27 @@ canvas.addEventListener( 'mousemove', ( e ) =>
 
          if(brushType == "brush"){
             ctx.strokeStyle = brushColor;
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.stroke();
+
+            [lastX, lastY] = [x, y];
          }
          else if(brushType == 'e'){
             ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.stroke();
+
+            [lastX, lastY] = [x, y];
          }
-         ctx.lineWidth = brushSize;
-         ctx.lineCap = 'round';
-         ctx.lineJoin = 'round';
-
-         ctx.stroke();
-
-         [lastX, lastY] = [x, y];
-      }
-      
-      function draw ( x, y , e)
-      {
-         syncColor(); 
-         ctx.lineJoin = 'round';
-         ctx.lineCap = 'round';
-         // console.log(x,y);
-      
-         if ( brushType == "brush" )
-         {
-            drawPencil( x, y, brushColor, e);
-            AddClientData( x, y, brushSize, brushColor );
+          if (brushType == 'pan'){
+            alert('Pan tool is not yet implemented');
          }
-         else if ( brushType == 'e' )
-         {
-            drawPencil( x, y,"#ffffff", e );
-            AddClientData( x, y, brushSize, "#ffffff" );
-         }
-      };
-      
-      function drawPencil ( x, y, color, e)
-      {  
-
-         ctx.lineWidth = brushSize;
-         ctx.lineCap = 'round';
-         ctx.strokeStyle = brushColor;
-
-         ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-         ctx.stroke();
-         ctx.beginPath();
-         ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-      
-         // ctx.arc( x, y, rad, 0, Math.PI * 2 );
-         // ctx.fillStyle = color;
-         // ctx.fill();
-         // ctx.closePath();
       }
       // End Brush
       
@@ -300,6 +273,28 @@ canvas.addEventListener( "mouseup", ( e ) =>
 /* Color Selecter Js End*/
 
 /* Misc Helper functions*/ 
+
+
+window.addEventListener('keypress', (event) =>{
+   if(event.key == 'c'){
+      showMenu();
+   }
+   else if(event.key == 'h'){
+      home = document.getElementById('home');
+      home.click();
+   }
+   else if(event.key == 'b'){
+      setBrush();
+   }
+   else if (event.key == 'e'){
+      setErase();
+   }
+   else if(event.key == 'p'){
+      setPan();
+   }
+
+})
+
 
 function syncColor ()
 {
@@ -345,6 +340,11 @@ function setErase ()
 
 function setPan ()
 {
+   if(brushType != 'pan'){
+      b.classList.remove( 'active-brush' );
+      e.classList.remove( 'active-brush' );
+      p.classList.add( 'active-brush' );
+   }
    brushType = 'pan';
 }
 function swapWidthHeight ()
