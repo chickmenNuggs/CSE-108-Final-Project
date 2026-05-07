@@ -57,22 +57,30 @@ window.socket.on( "SyncBoardOnLateJoin", async ( buffer ) =>
 window.socket.on( "SetClientCanvas", async ( data ) =>
 {
    if ( IsSinglePlayerSession() ) return;
-   // first index is always the host.
+
    let width = data.Canvas.Width;
    let height = data.Canvas.Height;
 
-   LogCurrentWebsocketEvent( "SetClientCanvas", `Client "${ window.localUserName }" is creating canvas with width "${ width }" and height "${ height }" from host.` );
+   LogCurrentWebsocketEvent( "SetClientCanvas",
+      `Client "${ window.localUserName }" is creating canvas with width "${ width }" and height "${ height }" from host.` );
+
    SetClientCanvas( width, height );
 
    if ( data.Canvas && data.Canvas.Data )
    {
-      await LoadBoardFromBuffer( data.Canvas.Data );
+      await LoadCanvasFromBuffer( data.Canvas.Data );
+
+      // Re-sync after 2 seconds (might lower) to ensure latest state just in case a new snapshot was being sent over.
+      setTimeout( async () =>
+      {
+         await LoadCanvasFromBuffer( data.Canvas.Data );
+      }, 2000 );
    }
 } );
 
-async function LoadBoardFromBuffer ( buffer )
+async function LoadCanvasFromBuffer ( buffer )
 {
-   LogCurrentWebsocketEvent( "LoadBoardFromBuffer", "Drawing canvas buffer for late join." );
+   LogCurrentWebsocketEvent( "LoadCanvasFromBuffer", "Drawing canvas buffer for late join." );
    const blob = new Blob( [ buffer ], { type: "image/webp" } );
    const bitmap = await createImageBitmap( blob );
 
@@ -98,11 +106,20 @@ window.socket.on( "SyncBoard", ( data ) =>
    if ( IsSinglePlayerSession() ) return;
 
    LogCurrentWebsocketEvent( "Sync Board", `Syncing current board state to every client.` )
+
+   // Not a good way to do this but whatever.
+   const previousLastX = lastX;
+   const previousLastY = lastY;
+
    for ( const board of data )
    {
-      drawPencil( board.point.x, board.point.y, board.brushSize, board.brushColor )
+      lastX = board.lastPoint.x;
+      lastY = board.lastPoint.y;
+      drawkill( board.point.x, board.point.y, board.size, board.color );
    }
 
+   lastX = previousLastX;
+   lastY = previousLastY;
 } );
 
 window.onbeforeunload = function ()
@@ -148,26 +165,32 @@ function UpdateGameState ()
             x: client.point.x,
             y: client.point.y
          },
-         brushSize: client.brushSize,
-         brushColor: client.brushColor
+         lastPoint:
+         {
+            x: client.lastPoint.x,
+            y: client.lastPoint.y
+         },
+         size: client.brushSize,
+         color: client.brushColor
       } ) )
    } );
 
    LogCurrentWebsocketEvent( "Update Game State", `Sending client "${ window.localUserName }" current board state to everyone in the lobby.` )
 }
 
-const CLIENT_DATA_THRESHOLD = 10
+const CLIENT_DATA_THRESHOLD = 15
 
-function AddClientData ( x, y, brushSize, brushColor )
+function AddClientData ( x, y, lastX, lastY, size, color )
 {
    if ( IsSinglePlayerSession() ) return;
+
+   clientDataList.push( new ClientData( new Point( x, y ), new Point( lastX, lastY ), size, color ) )
 
    if ( clientDataList.length >= CLIENT_DATA_THRESHOLD )
    {
       UpdateGameState();
       clientDataList = []
    }
-   clientDataList.push( new ClientData( new Vector( x, y ), brushSize, brushColor ) )
 }
 
 let syncTimer = null;
@@ -207,7 +230,7 @@ function IsSinglePlayerSession ()
 {
    return window.gameId == SINGLE_PLAYER
 }
-class Vector
+class Point
 {
    constructor ( x, y )
    {
@@ -218,9 +241,10 @@ class Vector
 
 class ClientData
 {
-   constructor ( vector, brushSize, brushColor )
+   constructor ( currentPoint, lastPoint, brushSize, brushColor )
    {
-      this.point = vector;
+      this.point = currentPoint;
+      this.lastPoint = lastPoint;
       this.brushSize = brushSize;
       this.brushColor = brushColor;
    }
