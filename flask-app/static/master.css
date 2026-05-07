@@ -441,6 +441,33 @@
 
 }
 
+.exporter{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background-color: rgba(0, 0, 0, 60%);
+    justify-content: center;
+    align-items: center;
+}
+.exportBin{
+    background-color: #e4ac63;
+    width: 25%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+}
+
+.expCol{
+    display: flex;
+    width: 80%;
+    height: 100%;
+    /* align-items: center; */
+    justify-content: center;
+}
+
 #ploingus{
     width: 100%;
     height: 80%;
