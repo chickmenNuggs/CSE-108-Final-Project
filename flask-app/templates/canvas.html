@@ -5,7 +5,26 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../static/master.css">
+   <link rel="stylesheet" href="../static/colorjoe.css">
+
    <title>Document</title>
+
+   <style>
+      /* for colorjoe library, dont touch */
+      .colorPicker{
+          background:none;
+          border: none;
+          margin: 0;;
+          padding: 0;
+          width: 100%;
+          height: 10;
+      }
+      .colorPicker .oned{
+         margin-left: 0;
+      }
+
+      
+   </style>
 </head>
 
 <body>
@@ -25,11 +44,14 @@
          <div class="wide-div">
             <div class=tool-bar>
                <div class="color-selector">
-
+                  <div class = colorjoe></div>
+               </div>
+               <div class = config>
+                  <div class = selected-color-text></div>
                </div>
                <div class=selected-color>
                   <label for="selected-color"> Hex :</label>
-                  <input id="selected-color" type="text" value="#000000" onchange="syncColor()">
+                  <input class id="selected-color" type="text" value="#000000" onchange="syncColor()">
                </div>
                <div class=brush-settings>
                   <div class="brush-size">
@@ -169,7 +191,32 @@
    <script src="/static/Socket.js"></script>
    <script src="../static/ClientCanvas.js"></script>
    <script src="../static/master.js"></script>
+   <script src="../static/colorjoe.min.js"></script>
+   <script>
+      // import syncColor from master.js
+      class colorPicker{
+         constructor(root){
+            this.root = root;
+            this.colorjoe =  colorjoe.rgb(this.root.querySelector(".colorjoe"));
+            this.selectedColor = null;
+            this.colorjoe.on('change', color => {
+               this.setSelectedColor(color.hex())
+               // console.log(color.hex);
+            });
+            
 
+            this.colorjoe.show();
+         }
+         setSelectedColor(color, skipCjUpdate = false){
+            this.selectedColor = color;
+            document.getElementById('selected-color').value = color;
+            syncColor();
+         }
+      }
+
+      const cj = new colorPicker(document.querySelector('.color-selector'))
+
+   </script>
 </body>
 
 </html>

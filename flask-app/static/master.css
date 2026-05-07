@@ -299,6 +299,9 @@
     background-color: #727272;
     width: 100%;
     aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .selected-color{
     width: 96%;
@@ -467,6 +470,7 @@
     /* align-items: center; */
     justify-content: center;
 }
+
 
 #ploingus{
     width: 100%;

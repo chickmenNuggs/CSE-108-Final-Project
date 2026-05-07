@@ -270,6 +270,33 @@ canvas.addEventListener( "mouseup", ( e ) =>
 
 /* Color Selecter Js*/
 
+window.addEventListener(onload ,(event)=>{
+   cj = colorjeo.rgb()
+   // import syncColor from master.js
+      class colorPicker{
+         constructor(root){
+            this.root = root;
+            this.colorjoe =  colorjoe.rgb(this.root.querySelector(".colorjoe"));
+            this.selectedColor = null;
+            this.colorjoe.on('change', color => {
+               this.setSelectedColor(color.hex())
+               // console.log(color.hex);
+            });
+            
+
+            this.colorjoe.show();
+         }
+         setSelectedColor(color, skipCjUpdate = false){
+            this.selectedColor = color;
+            document.getElementById('selected-color').value = color;
+            // syncColor();
+         }
+      }
+
+      const cj = new colorPicker(document.querySelector('.color-selector'))
+
+})
+
 /* Color Selecter Js End*/
 
 /* Misc Helper functions*/ 
