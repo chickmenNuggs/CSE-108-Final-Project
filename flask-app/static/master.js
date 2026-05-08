@@ -11,6 +11,7 @@ let brushColor;
 let isDrawing = false;
 let isSaved = true;
 let isShowing = false;
+let isMultiplayer = false;
 var x, y;
 canvas = document.getElementById( 'myCanvas' );
 ctx = canvas.getContext( '2d' )
@@ -23,7 +24,10 @@ b = document.getElementById( 'brush' );
 e = document.getElementById( 'eraser' );
 p = document.getElementById( 'e-pan' );
 exp = document.getElementById( 'expMenu' );
+input = document.getElementById( 'telture' );
+
 let lastX, lastY;
+
 
 /*Drop Down Menu Start*/
 function showMenu ()
@@ -81,11 +85,13 @@ function saveCanvas ()
 
 function exportCanvas ()
 {
+
    isSaved = true;
    hideExp()
+   // alert("file saved")
 }
 
-/* Save / Export Code Start*/
+/* Save / Export Code End*/
 
 /* Canvas Js Start*/
 function canvasInit ()
@@ -132,7 +138,7 @@ function canvasInit ()
 
    create.classList.add( 'hidden' );
    canvas.classList.remove( 'hidden' );
-   brushColor = '#000000';
+   syncColor();
    brushType = 'brush';
    brushSize = 10;
 
@@ -269,69 +275,87 @@ canvas.addEventListener( "mouseup", ( e ) =>
    ForceSyncBoard();
 } );
 
-
-
-
-
-/* Color Selecter Js*/
-
-window.addEventListener(onload ,(event)=>{
-   cj = colorjeo.rgb()
-   // import syncColor from master.js
-      class colorPicker{
-         constructor(root){
-            this.root = root;
-            this.colorjoe =  colorjoe.rgb(this.root.querySelector(".colorjoe"));
-            this.selectedColor = null;
-            this.colorjoe.on('change', color => {
-               this.setSelectedColor(color.hex())
-               // console.log(color.hex);
-            });
-            
-
-            this.colorjoe.show();
-         }
-         setSelectedColor(color, skipCjUpdate = false){
-            this.selectedColor = color;
-            document.getElementById('selected-color').value = color;
-            // syncColor();
-         }
-      }
-
-      const cj = new colorPicker(document.querySelector('.color-selector'))
-
-})
-
-/* Color Selecter Js End*/
-
 /* Misc Helper functions*/
 
+window.addEventListener('load',(event)=>{
+   if( IsSinglePlayerSession() ){
+      document.getElementById('m-helper').classList.add('hidden');
+   }
+})
 
-window.addEventListener( 'keypress', ( event ) =>
-{
-   if ( event.key == 'c' )
-   {
-      showMenu();
+input.addEventListener('keydown', function(event) {
+   if(!IsSinglePlayerSession() ){
+
+      // NEEDS SELF IF SENDER IS SELF
+      self = true;
+      
+      if (event.key == 'Enter'){
+         
+         user = 'temp';
+         
+         msg =  input.value;
+         event.preventDefault();
+         console.log(msg);
+         //NEEDS USERNAME AS  USER 
+         sendMSG(self, user, msg);
+      }
    }
-   else if ( event.key == 'h' )
-   {
-      home = document.getElementById( 'home' );
-      home.click();
-   }
-   else if ( event.key == 'b' )
-   {
-      setBrush();
-   }
-   else if ( event.key == 'e' )
-   {
-      setErase();
-   }
-   else if ( event.key == 'p' )
-   {
-      setPan();
+})
+
+async function sendMSG (self, user, message){
+   isSelf = false;
+   chat = document.getElementById('chat');
+
+   if(self){
+      
    }
 
-} )
+
+   msgBox = document.createElement('div');
+   sender = document.createElement('div');
+   msg = document.createElement('div');
+   
+   msgBox.classList.add('msg')
+   sender.id = "sender";
+   msg.id = "msg";
+   
+   sender.innerText = user;
+   msg.innerText = message;
+
+   msgBox.appendChild(sender);
+   msgBox.appendChild(msg);
+
+   
+   chat.appendChild(msgBox);
+
+
+}
+
+// window.addEventListener( 'keypress', ( event ) =>
+// {
+//    if ( event.key == 'c' )
+//    {
+//       showMenu();
+//    }
+//    else if ( event.key == 'h' )
+//    {
+//       home = document.getElementById( 'home' );
+//       home.click();
+//    }
+//    else if ( event.key == 'b' )
+//    {
+//       setBrush();
+//    }
+//    else if ( event.key == 'e' )
+//    {
+//       setErase();
+//    }
+//    else if ( event.key == 'p' )
+//    {
+//       setPan();
+//    }
+
+// } )
 
 
 function syncColor ()

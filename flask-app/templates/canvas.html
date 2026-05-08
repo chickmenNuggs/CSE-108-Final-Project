@@ -35,6 +35,7 @@
             <div class='file-deets hidden' id=files>
                <a class='file-buttons' onclick="newCanvas()">New</a>
                <a class='file-buttons'>Save</a>
+               <a class='file-buttons'>Load</a>
                <a class='file-buttons' onclick ='showExp()'>Export</a>
                <a class='file-buttons' onclick="clearCanvas()">Clear</a>
             </div>
@@ -73,20 +74,7 @@
                      </button>
                   </div>
                </div>
-               <div class=neo-roster>
-                  <div class=header>
-                     <div id=l>
-                        Player Roster
-                     </div>
-                     <div id='r'>
-                        1/4
-                     </div>
-                  </div>
-                  <div id=ploingus>
-                     <div class=player-list id=host> Host</div>
-
-                  </div>
-               </div>
+              
             </div>
             <div class=canvas-holder>
                <div class="create-new">
@@ -131,8 +119,43 @@
                   Your browser does not support the Canvas element :&#40
                </canvas>
             </div>
-         </div>
+            <div class = 'multiplayer-bar ' id = m-helper>
+                <div class=neo-roster>
+                  <div class=header>
+                     <div id=l>
+                        Player Roster
+                     </div>
+                     <div id='r'>
+                        1/4
+                     </div>
+                  </div>
+                  <div id=ploingus> <div class=player-list id=host> Host</div> </div>
+               </div>
+               <div class = chatbox>
+                  <div class = responses id = chat>
 
+                     <div class = my-msg>
+                        <div id = sender> Host </div>
+                        <div id = msg>
+                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem facere cum architecto tempora, consectetur neque.
+                        </div>
+                     </div>
+                     <div class = msg>
+                        <div id = sender> Other </div>
+                        <div id = msg>
+                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem facere cum architecto tempora, consectetur neque.
+                        </div>
+                     </div>
+                     
+                     
+                  </div>
+                  <div class = enter>
+                     <input type="text" class = 'usermsg' id = 'telture'>
+                  </div>
+                  
+               </div>
+            </div>
+         </div>
       </div>
       <div class = "exporter hidden" id = expMenu>
          <div class = exportBin>
@@ -163,7 +186,7 @@
                   </tr>
                   <tr>
                      <td>
-                        <button id = save> Save File</button>
+                        <button id = save onclick = "exportCanvas()"> Save File</button>
                      </td>
                      <td>
                         <button id = cancel onclick="hideExp()">Cancel</button>
