@@ -285,67 +285,52 @@ canvas.addEventListener( "mouseup", ( e ) =>
 
 /* Misc Helper functions*/
 
-window.addEventListener('load',(event)=>{
-   if( IsSinglePlayerSession() ){
-      document.getElementById('m-helper').classList.add('hidden');
+window.addEventListener( 'load', ( event ) =>
+{
+   if ( IsSinglePlayerSession() )
+   {
+      document.getElementById( 'm-helper' ).classList.add( 'hidden' );
    }
-})
+} )
 
-input.addEventListener('keydown', function(event) {
-   if(!IsSinglePlayerSession() ){
+input.addEventListener( 'keydown', function ( event )
+{
+   if ( IsSinglePlayerSession() ) return;
 
-      // NEEDS SELF IF SENDER IS SELF
-      self = true;
-      
-      if (event.key == 'Enter'){
-         user = 'temp';         
-         msg =  input.value;
-         event.preventDefault();
-         input.value = "";
-         //NEEDS USERNAME AS  USER 
-         sendMSG(self, user, msg);
-      }
-   }
-})
+   if ( event.key != 'Enter' ) return;
 
-async function sendMSG (self, user, message){
-   chat = document.getElementById('chat');
+   msg = input.value;
+   event.preventDefault();
+   input.value = "";
+   //NEEDS USERNAME AS  USER 
+   window.socket.emit( "OnChatMessageSent", { "Id": window.gameId, "User": window.localUserName, "Message": msg } );
+} )
 
-   if(self){
-       msgBox = document.createElement('div');
-      sender = document.createElement('div');
-      msg = document.createElement('div');
-      
-      msgBox.classList.add('my-msg')
-      sender.id = "sender";
-      msg.id = "msg";
-      
-      sender.innerText = user;
-      msg.innerText = message;
+window.socket.on( "OnChatMessageSent", ( data ) =>
+{
+   LogCurrentWebsocketEvent( "OnChatMessageSent", "Sent chat message" );
+   sendMSG( data.Name == window.localUserName, data.Name, data.Message );
+} );
 
-      msgBox.appendChild(sender);
-      msgBox.appendChild(msg);      
-      chat.appendChild(msgBox);
-   }
-   else{
-      
-         msgBox = document.createElement('div');
-         sender = document.createElement('div');
-         msg = document.createElement('div');
-         
-         msgBox.classList.add('msg')
-         sender.id = "sender";
-         msg.id = "msg";
-         
-         sender.innerText = user;
-         msg.innerText = message;
-      
-         msgBox.appendChild(sender);
-         msgBox.appendChild(msg);
-         chat.appendChild(msgBox);
+async function sendMSG ( self, user, message )
+{
+   chat = document.getElementById( 'chat' );
 
-   }
+   msgBox = document.createElement( 'div' );
+   sender = document.createElement( 'div' );
+   msg = document.createElement( 'div' );
 
+   // Intended.
+   _ = self ? msgBox.classList.add( 'my-msg' ) : msgBox.classList.add( 'msg' )
+   sender.id = "sender";
+   msg.id = "msg";
+
+   sender.innerText = user;
+   msg.innerText = message;
+
+   msgBox.appendChild( sender );
+   msgBox.appendChild( msg );
+   chat.appendChild( msgBox );
 
 }
 

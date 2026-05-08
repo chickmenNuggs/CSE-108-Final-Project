@@ -110,6 +110,16 @@ def UpdateServerBackendCanvas(data):
     
     lobbies[lobbyId]["Canvas"]["Data"] = canvas
 
+@socketio.on("OnChatMessageSent")
+def OnMessageSent(data):
+    print(data)
+    lobbyId = data.get("Id")
+    if not lobbyId:
+        EmitErrorMessage("No lobby Id.")
+        return
+    
+    emit("OnChatMessageSent", {"Name": data.get("User"), "Message": data.get("Message")}, room = lobbyId)
+
 @socketio.on("RemovePlayer")
 def RemovePlayerFromLobby(data):
     connectedClients.pop(request.sid, None)
