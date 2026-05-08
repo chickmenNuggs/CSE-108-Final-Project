@@ -165,11 +165,19 @@ function SetClientCanvas ( width, height )
 }
 
 
-function clearCanvas ()
+function clearCanvas ( emit = true )
 {
    ctx.clearRect( 0, 0, canvas.width, canvas.height )
    ctx.beginPath();
    hideMenu();
+
+   if ( !IsSinglePlayerSession() && emit )
+   {
+      window.socket.emit( "ClearCanvas", { "Id": window.gameId } );
+
+      // Once we clear the board we need to force send a snapshot of the blank canvas.
+      UpdateServerCanvas();
+   }
 }
 
 function newCanvas ()
@@ -178,7 +186,7 @@ function newCanvas ()
    {
       backWarn();
    }
-   clearCanvas()
+   clearCanvas( false )
    canvas.classList.add( 'hidden' )
    create.classList.remove( 'hidden' )
 }

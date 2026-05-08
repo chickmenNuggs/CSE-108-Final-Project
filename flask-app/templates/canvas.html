@@ -11,19 +11,19 @@
 
    <style>
       /* for colorjoe library, dont touch */
-      .colorPicker{
-          background:none;
-          border: none;
-          margin: 0;;
-          padding: 0;
-          width: 100%;
-          height: 10;
-      }
-      .colorPicker .oned{
-         margin-left: 0;
+      .colorPicker {
+         background: none;
+         border: none;
+         margin: 0;
+         ;
+         padding: 0;
+         width: 100%;
+         height: 10;
       }
 
-      
+      .colorPicker .oned {
+         margin-left: 0;
+      }
    </style>
 </head>
 
@@ -35,20 +35,19 @@
             <div class='file-deets hidden' id=files>
                <a class='file-buttons' onclick="newCanvas()">New</a>
                <a class='file-buttons'>Save</a>
-               <a class='file-buttons'>Load</a>
-               <a class='file-buttons' onclick ='showExp()'>Export</a>
-               <a class='file-buttons' onclick="clearCanvas()">Clear</a>
+               <a class='file-buttons' onclick='showExp()'>Export</a>
+               <a class='file-buttons' onclick="clearCanvas(true)">Clear</a>
             </div>
-            <a class="action-buttons" href="{{url_for('home')}}" onclick="backWarn()" id = 'home'>Home</a>
+            <a class="action-buttons" href="{{url_for('home')}}" onclick="backWarn()" id='home'>Home</a>
 
          </div>
          <div class="wide-div">
             <div class=tool-bar>
                <div class="color-selector">
-                  <div class = colorjoe></div>
+                  <div class=colorjoe></div>
                </div>
-               <div class = config>
-                  <div class = selected-color-text></div>
+               <div class=config>
+                  <div class=selected-color-text></div>
                </div>
                <div class=selected-color>
                   <label for="selected-color"> Hex :</label>
@@ -157,9 +156,9 @@
             </div>
          </div>
       </div>
-      <div class = "exporter hidden" id = expMenu>
-         <div class = exportBin>
-            <div class = expCol>
+      <div class="exporter hidden" id=expMenu>
+         <div class=exportBin>
+            <div class=expCol>
                <table>
                   <tr>
                      <th colspan="2">
@@ -168,18 +167,19 @@
                   </tr>
                   <tr>
                      <td>
-                        <label for = name> Name: </label>
+                        <label for=name> Name: </label>
                      </td>
                      <td>
-                        <input id = name value = 'Drawing'>
+                        <input id=name value='Drawing'>
                      </td>
                   </tr>
                   <tr>
                      <td>
-                        <label for = 'format'> File Format</label></td>
+                        <label for='format'> File Format</label>
+                     </td>
                      <td>
-                        <select id = format> 
-                           <option value = 'PNG'> PNG </option>
+                        <select id=format>
+                           <option value='PNG'> PNG </option>
                            <option value="JPEG"> JPEG</option>
                         </select>
                      </td>
@@ -189,7 +189,7 @@
                         <button id = save onclick = "exportCanvas()"> Save File</button>
                      </td>
                      <td>
-                        <button id = cancel onclick="hideExp()">Cancel</button>
+                        <button id=cancel onclick="hideExp()">Cancel</button>
                      </td>
                   </tr>
                </table>
@@ -217,27 +217,31 @@
    <script src="../static/colorjoe.min.js"></script>
    <script>
       // import syncColor from master.js
-      class colorPicker{
-         constructor(root){
+      class colorPicker
+      {
+         constructor ( root )
+         {
             this.root = root;
-            this.colorjoe =  colorjoe.rgb(this.root.querySelector(".colorjoe"));
+            this.colorjoe = colorjoe.rgb( this.root.querySelector( ".colorjoe" ) );
             this.selectedColor = null;
-            this.colorjoe.on('change', color => {
-               this.setSelectedColor(color.hex())
+            this.colorjoe.on( 'change', color =>
+            {
+               this.setSelectedColor( color.hex() )
                // console.log(color.hex);
-            });
-            
+            } );
+
 
             this.colorjoe.show();
          }
-         setSelectedColor(color, skipCjUpdate = false){
+         setSelectedColor ( color, skipCjUpdate = false )
+         {
             this.selectedColor = color;
-            document.getElementById('selected-color').value = color;
+            document.getElementById( 'selected-color' ).value = color;
             syncColor();
          }
       }
 
-      const cj = new colorPicker(document.querySelector('.color-selector'))
+      const cj = new colorPicker( document.querySelector( '.color-selector' ) )
 
    </script>
 </body>
