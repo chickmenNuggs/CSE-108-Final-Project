@@ -5,7 +5,7 @@
     padding: 0;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     scrollbar-width: thin;
-    scrollbar-color: #555555 #494848;
+    scrollbar-color: #d3d3d3 #494848;
 
 }
 
@@ -66,7 +66,24 @@
     font-size: x-large;
     color: #ffc478;
 }
-
+.home{
+     display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    text-align: center;
+    background-color: #e4ac63;
+    width: 8%;
+    height: 40px;
+    font-size: larger;
+    text-align: center;    
+    border: 5px #c78f47 solid ;
+    border-radius: 10px;
+    margin: 5px;
+    color: #ce1b71;
+    display: flex;
+    justify-content: center;    
+}
 
 /* Will add styles for settings */
 .settings-controls
@@ -274,7 +291,7 @@
     flex-direction: column;
     padding: 5px;
     margin-top: 38px;
-    height: 110px;
+    height: 80px;
     justify-content: center;
     z-index: 9999;
 }
@@ -297,7 +314,7 @@
     flex-direction: row;
 }
 .tool-bar{
-    width: 18%;
+    width: 15.25%;
     height: 99.3%;
     border: #312515 solid 2px;
     border-top: 0px;
@@ -334,6 +351,24 @@
     padding-left: 10px;
     padding-top: 5px;
 }
+.pan{
+    display: flex;
+    flex-direction: row;
+    height: 20%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.pan-buttons{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: large;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
 #brush-range{
     margin: auto;
     accent-color: #ffc478;
@@ -405,12 +440,21 @@
     justify-content: center;
     align-items: center;
     border-right: #312515 solid 2px;
+    position: relative;
 
 }
 #myCanvas{
     background-color: white;
     border-bottom: #312515 solid 2px;
     cursor:default;
+}
+
+.canvas{    
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    margin: auto;
 
 }
 .neo-roster{

@@ -12,6 +12,7 @@ let isDrawing = false;
 let isSaved = true;
 let isShowing = false;
 let isMultiplayer = false;
+let zoomLevel = 1.0
 var x, y;
 canvas = document.getElementById( 'myCanvas' );
 ctx = canvas.getContext( '2d' )
@@ -109,11 +110,33 @@ async function saveCanvas()
 
 
 function exportCanvas ()
-{
-
+{ 
+   pigbool = document.getElementById("format");
+   png = true;
    isSaved = true;
+   name = document.getElementById('exp-name').value;
+   
+   if(pigbool.value = "PNG"){
+      png = true;
+   }
+   else{
+      png = false;
+   }
+
+   if(png){
+      image = canvas.toDataURL('image/png')
+   }
+   else{
+      image = canvas.toDataURL('image/jpeg')
+   }
+   const link = document.createElement('a');
+   link.download = name + '.png';
+   link.href = image;
+   link.click();
+
+
+
    hideExp()
-   // alert("file saved")
 }
 
 /* Save / Export Code End*/
@@ -607,13 +630,42 @@ function unitConversion ( el )
 
 function zoomIn ()
 {
-
+    zoomLevel += 0.1;
+    canvas.style.transformOrigin = "0 0"; 
+    canvas.style.transform = `scale(${zoomLevel})`;
 }
-function zoomOut ()
+
+function zoomOut()
 {
-
+   zoomLevel -= 0.1;
+    canvas.style.transformOrigin = "0 0"; 
+    canvas.style.transform = `scale(${zoomLevel})`;
 }
 
+function reZoom(){
+   zoomLevel = 1.0;
+   canvas.style.transformOrigin = "0 0"; 
+   canvas.style.transform = `scale(${zoomLevel})`;
+}
+
+window.addEventListener('wheel', (e) => {
+    if (e.ctrlKey) {
+        e.preventDefault();
+        
+        const zoomSpeed = 0.01;
+        if (e.deltaY > 0) {
+            zoomLevel -= zoomSpeed; // Scroll down = Zoom out
+        } else {
+            zoomLevel += zoomSpeed; // Scroll up = Zoom in
+        }
+
+        
+        zoomLevel = Math.min(Math.max(.1, zoomLevel), 10);
+
+        canvas.style.transformOrigin = "0 0";
+        canvas.style.transform = `scale(${zoomLevel})`;
+    }
+}, { passive: false });
 
 /* Misc Helper functions end */
 
