@@ -298,12 +298,10 @@ input.addEventListener('keydown', function(event) {
       self = true;
       
       if (event.key == 'Enter'){
-         
-         user = 'temp';
-         
+         user = 'temp';         
          msg =  input.value;
          event.preventDefault();
-         console.log(msg);
+         input.value = "";
          //NEEDS USERNAME AS  USER 
          sendMSG(self, user, msg);
       }
@@ -311,30 +309,42 @@ input.addEventListener('keydown', function(event) {
 })
 
 async function sendMSG (self, user, message){
-   isSelf = false;
    chat = document.getElementById('chat');
 
    if(self){
+       msgBox = document.createElement('div');
+      sender = document.createElement('div');
+      msg = document.createElement('div');
       
+      msgBox.classList.add('my-msg')
+      sender.id = "sender";
+      msg.id = "msg";
+      
+      sender.innerText = user;
+      msg.innerText = message;
+
+      msgBox.appendChild(sender);
+      msgBox.appendChild(msg);      
+      chat.appendChild(msgBox);
    }
+   else{
+      
+         msgBox = document.createElement('div');
+         sender = document.createElement('div');
+         msg = document.createElement('div');
+         
+         msgBox.classList.add('msg')
+         sender.id = "sender";
+         msg.id = "msg";
+         
+         sender.innerText = user;
+         msg.innerText = message;
+      
+         msgBox.appendChild(sender);
+         msgBox.appendChild(msg);
+         chat.appendChild(msgBox);
 
-
-   msgBox = document.createElement('div');
-   sender = document.createElement('div');
-   msg = document.createElement('div');
-   
-   msgBox.classList.add('msg')
-   sender.id = "sender";
-   msg.id = "msg";
-   
-   sender.innerText = user;
-   msg.innerText = message;
-
-   msgBox.appendChild(sender);
-   msgBox.appendChild(msg);
-
-   
-   chat.appendChild(msgBox);
+   }
 
 
 }
