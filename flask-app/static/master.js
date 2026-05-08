@@ -76,10 +76,35 @@ function hideExp ()
    exp.classList.add( 'hidden' );
 }
 
-function saveCanvas ()
+async function saveCanvas()
 {
+   const name = prompt("Enter drawing name:");
 
-   isSaved = true;
+   if (!name)
+   {
+      return;
+   }
+
+   const image = canvas.toDataURL("image/png");
+
+   const response = await fetch("/save-drawing/", {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+         name: name,
+         image: image
+      })
+   });
+
+   const data = await response.json();
+
+   if (data.success)
+   {
+      alert("Drawing saved!");
+      isSaved = true;
+   }
 }
 
 

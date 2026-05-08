@@ -1,10 +1,12 @@
-from flask import Flask, redirect, render_template, request, url_for, session
+from flask import Flask, jsonify, redirect, render_template, request, url_for, session
 from flask_login import LoginManager, login_required, current_user
 from User import GetUserFromName
 from server import socketio
 
 # Custom user python file
 from User import GetUser, TryToRegister, LoggedInSucessfully
+
+from saved import Saved
 
 from database import db
 
@@ -143,13 +145,43 @@ def change_password():
 @app.route("/saved/")
 @login_required
 def saved():
-    return render_template("saved.html")
+
+    drawings = Saved.query.filter_by(
+        username=current_user.username
+    ).all()
+
+    return render_template(
+        "saved.html",
+        drawings=drawings
+    )
 
 @app.route('/settings/')
 @login_required
 def settings():
     return render_template('settings.html')
 
+@app.route("/save-drawing/", methods=["POST"])
+@login_required
+def save_drawing():
+
+    data = request.get_json()
+
+    drawingName = data.get("name")
+    imageData = data.get("image")
+
+    if not drawingName or not imageData:
+        return jsonify({"success": False})
+
+    drawing = Saved(
+        username=current_user.username,
+        drawing_name=drawingName,
+        image_data=imageData
+    )
+
+    db.session.add(drawing)
+    db.session.commit()
+
+    return jsonify({"success": True})
 
 @app.route("/logout/")
 @login_required

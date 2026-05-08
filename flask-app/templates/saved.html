@@ -1,11 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="../static/master.css">
+
+    <title>Saved Drawings</title>
 </head>
+
 <body>
-    saved
+
+<div class="background">
+
+    <div class="login-header">
+        Saved Drawings
+    </div>
+
+    <div class="login-container"
+         style="
+         width: 80%;
+         height: 80%;
+         overflow-y: auto;
+         flex-direction: column;
+         ">
+
+        {% for drawing in drawings %}
+
+        <div style="
+            width: 90%;
+            background-color: #555555;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        ">
+
+            <div>
+
+                <h2 style="color:#ffc478;">
+                    {{ drawing.drawing_name }}
+                </h2>
+
+                <img
+                    src="{{ drawing.image_data }}"
+                    width="250"
+                    style="
+                    border-radius: 10px;
+                    border: 3px solid #ffc478;
+                    "
+                >
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
 </body>
 </html>
