@@ -159,11 +159,19 @@ function SetClientCanvas ( width, height )
 }
 
 
-function clearCanvas ()
+function clearCanvas ( emit = true )
 {
    ctx.clearRect( 0, 0, canvas.width, canvas.height )
    ctx.beginPath();
    hideMenu();
+
+   if ( !IsSinglePlayerSession() && emit )
+   {
+      window.socket.emit( "ClearCanvas", { "Id": window.gameId } );
+
+      // Once we clear the board we need to force send a snapshot of the blank canvas.
+      UpdateServerCanvas();
+   }
 }
 
 function newCanvas ()
@@ -172,7 +180,7 @@ function newCanvas ()
    {
       backWarn();
    }
-   clearCanvas()
+   clearCanvas( false )
    canvas.classList.add( 'hidden' )
    create.classList.remove( 'hidden' )
 }
@@ -275,32 +283,37 @@ canvas.addEventListener( "mouseup", ( e ) =>
 
 /* Color Selecter Js*/
 
-window.addEventListener(onload ,(event)=>{
+window.addEventListener( onload, ( event ) =>
+{
    cj = colorjeo.rgb()
    // import syncColor from master.js
-      class colorPicker{
-         constructor(root){
-            this.root = root;
-            this.colorjoe =  colorjoe.rgb(this.root.querySelector(".colorjoe"));
-            this.selectedColor = null;
-            this.colorjoe.on('change', color => {
-               this.setSelectedColor(color.hex())
-               // console.log(color.hex);
-            });
-            
+   class colorPicker
+   {
+      constructor ( root )
+      {
+         this.root = root;
+         this.colorjoe = colorjoe.rgb( this.root.querySelector( ".colorjoe" ) );
+         this.selectedColor = null;
+         this.colorjoe.on( 'change', color =>
+         {
+            this.setSelectedColor( color.hex() )
+            // console.log(color.hex);
+         } );
 
-            this.colorjoe.show();
-         }
-         setSelectedColor(color, skipCjUpdate = false){
-            this.selectedColor = color;
-            document.getElementById('selected-color').value = color;
-            // syncColor();
-         }
+
+         this.colorjoe.show();
       }
+      setSelectedColor ( color, skipCjUpdate = false )
+      {
+         this.selectedColor = color;
+         document.getElementById( 'selected-color' ).value = color;
+         // syncColor();
+      }
+   }
 
-      const cj = new colorPicker(document.querySelector('.color-selector'))
+   const cj = new colorPicker( document.querySelector( '.color-selector' ) )
 
-})
+} )
 
 /* Color Selecter Js End*/
 

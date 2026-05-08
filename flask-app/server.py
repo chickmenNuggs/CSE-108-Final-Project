@@ -156,6 +156,16 @@ def RemovePlayerFromLobby(data):
     }, room = lobbyId)
 
 
+@socketio.on("ClearCanvas")
+def OnClearCanvas(data):
+    lobbyId = data.get("Id")
+
+    if not lobbyId:
+        EmitErrorMessage("No lobby Id")
+        return
+
+    emit("ClearCanvas", room=lobbyId, include_self=False)
+
 # Called from master.js
 @socketio.on("CreatedCanvas")
 def OnCreateCanvas(data):

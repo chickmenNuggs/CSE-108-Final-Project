@@ -54,6 +54,12 @@ window.socket.on( "SyncBoardOnLateJoin", async ( buffer ) =>
 } );
 
 
+window.socket.on( "ClearCanvas", ( data ) =>
+{
+   LogCurrentWebsocketEvent( "Clear Canvas", "Clearing Canvas" );
+   clearCanvas( false );
+} );
+
 window.socket.on( "SetClientCanvas", async ( data ) =>
 {
    if ( IsSinglePlayerSession() ) return;
@@ -74,7 +80,7 @@ window.socket.on( "SetClientCanvas", async ( data ) =>
       setTimeout( async () =>
       {
          await LoadCanvasFromBuffer( data.Canvas.Data );
-      }, 2000 );
+      }, 500 );
    }
 } );
 
@@ -206,19 +212,23 @@ function ForceSyncBoard ()
    clearTimeout( syncTimer );
    syncTimer = setTimeout( () =>
    {
-      canvas.toBlob( ( blob ) =>
-      {
-         blob.arrayBuffer().then( ( buffer ) =>
-         {
-            window.socket.emit( "UpdateSeverCanvas", { Id: window.gameId, Canvas: buffer } );
-         } );
-      }, "image/webp", 0.8 );
-
-      console.log( "After one second we are saving snapshot" );
+      UpdateServerCanvas();
    }, 1000 );
 
 
    clientDataList = [];
+}
+
+function UpdateServerCanvas ()
+{
+   LogCurrentWebsocketEvent( "UpdateServerCanvas", "Sending current snapshot of canvas to server." );
+   canvas.toBlob( ( blob ) =>
+   {
+      blob.arrayBuffer().then( ( buffer ) =>
+      {
+         window.socket.emit( "UpdateSeverCanvas", { Id: window.gameId, Canvas: buffer } );
+      } );
+   }, "image/webp", 0.8 );
 }
 
 function LogCurrentWebsocketEvent ( event, message )
