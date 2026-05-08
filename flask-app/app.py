@@ -183,6 +183,48 @@ def save_drawing():
 
     return jsonify({"success": True})
 
+@app.route("/delete-drawing/<int:id>/", methods=["POST"])
+@login_required
+def delete_drawing(id):
+
+    drawing = Saved.query.get(id)
+
+    if not drawing:
+        return jsonify({"success": False})
+
+    if drawing.username != current_user.username:
+        return jsonify({"success": False})
+
+    db.session.delete(drawing)
+    db.session.commit()
+
+    return jsonify({"success": True})
+
+@app.route("/load-drawing/<int:id>/")
+@login_required
+def load_drawing(id):
+
+    drawing = Saved.query.get(id)
+
+    if not drawing:
+        return redirect(url_for("saved"))
+
+    if drawing.username != current_user.username:
+        return redirect(url_for("saved"))
+
+    return render_template(
+        "canvas.html",
+        gameId=0,
+        drawingData=drawing.image_data,
+        LOBBY_LIST=LOBBY_LIST,
+        CREATE_LOBBY=CREATE_LOBBY,
+        VIEW_LOBBIES=VIEW_LOBBIES,
+        JOIN_LOBBY=JOIN_LOBBY,
+        UPDATE_GAME_STATE=UPDATE_GAME_STATE,
+        GET_LOBBY_DATA=GET_LOBBY_DATA,
+        localUserName=session["user"]
+    )
+
 @app.route("/logout/")
 @login_required
 def logout():

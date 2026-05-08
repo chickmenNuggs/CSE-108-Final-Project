@@ -53,6 +53,26 @@
                     border: 3px solid #ffc478;
                     "
                 >
+                <div style="margin-top:15px;">
+
+                    <a
+                        href="{{ url_for('load_drawing', id=drawing.id) }}"
+                        class="vert-button"
+                        style="padding:10px;"
+                    >
+                     Load
+                    </a>
+
+    <button
+        onclick="deleteDrawing({{ drawing.id }})"
+        class="vert-button"
+        style="padding:10px;"
+    >
+        Delete
+    </button>
+
+</div>
+                
 
             </div>
 
@@ -63,6 +83,22 @@
     </div>
 
 </div>
+<script>
 
+async function deleteDrawing(id)
+{
+    const response = await fetch(`/delete-drawing/${id}/`, {
+        method: "POST"
+    });
+
+    const data = await response.json();
+
+    if (data.success)
+    {
+        location.reload();
+    }
+}
+
+</script>
 </body>
 </html>
