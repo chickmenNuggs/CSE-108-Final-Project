@@ -4,8 +4,8 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="../static/master.css">
-   <link rel="stylesheet" href="../static/colorjoe.css">
+   <link rel="stylesheet" href="/static/master.css">
+   <link rel="stylesheet" href="/static/colorjoe.css">
 
    <title>Document</title>
 
@@ -61,7 +61,7 @@
                         oninput="syncBrushSize('brush-num', 'brush-range')">
                   </div>
                   <div class="brush-shape">
-                     <div class = pan>
+                     <div class=pan>
                         <button id="m-pan" onclick="zoomIn()" class='pan-buttons'>
                            +
                         </button>
@@ -69,17 +69,17 @@
                            -
                         </button>
                      </div>
-                      <button id="r-pan" onclick="reZoom()" class='brush-buttons '>
+                     <button id="r-pan" onclick="reZoom()" class='brush-buttons '>
                         Reset Zoom
-                     <button id="brush" onclick="setBrush()" class='brush-buttons active-brush'>
-                        Brush
-                     </button>
-                     <button id="eraser" onclick="setErase()" class='brush-buttons'>
-                        Eraser
-                     </button>
+                        <button id="brush" onclick="setBrush()" class='brush-buttons active-brush'>
+                           Brush
+                        </button>
+                        <button id="eraser" onclick="setErase()" class='brush-buttons'>
+                           Eraser
+                        </button>
                   </div>
                </div>
-              
+
             </div>
             <div class=canvas-holder>
                <div class="create-new">
@@ -124,8 +124,8 @@
                   Your browser does not support the Canvas element :&#40
                </canvas>
             </div>
-            <div class = 'multiplayer-bar ' id = m-helper>
-                <div class=neo-roster>
+            <div class='multiplayer-bar ' id=m-helper>
+               <div class=neo-roster>
                   <div class=header>
                      <div id=l>
                         Player Roster
@@ -134,30 +134,36 @@
                         1/4
                      </div>
                   </div>
-                  <div id=ploingus> <div class=player-list id=host> Host</div> </div>
+                  <div id=ploingus>
+                     <div class=player-list id=host> Host</div>
+                  </div>
                </div>
-               <div class = chatbox>
-                  <div class = responses id = chat>
+               <div class=chatbox>
+                  <div class=responses id=chat>
 
-                     <div class = my-msg>
-                        <div id = sender> Host </div>
-                        <div id = msg>
-                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem facere cum architecto tempora, consectetur neque.
+                     <div class=my-msg>
+                        <div id=sender> Host </div>
+                        <div id=msg>
+                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non
+                           impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem
+                           facere cum architecto tempora, consectetur neque.
                         </div>
                      </div>
-                     <div class = msg>
-                        <div id = sender> Other </div>
-                        <div id = msg>
-                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem facere cum architecto tempora, consectetur neque.
+                     <div class=msg>
+                        <div id=sender> Other </div>
+                        <div id=msg>
+                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non
+                           impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem
+                           facere cum architecto tempora, consectetur neque.
                         </div>
                      </div>
-                     
-                     
+
+
                   </div>
-                  <div class = enter>
-                     <input type="text" class = 'usermsg' id = 'telture'>
+                  <div class=enter>
+                     <input type="text" class='usermsg' id='telture'>
                   </div>
-                  
+
                </div>
             </div>
          </div>
@@ -192,7 +198,7 @@
                   </tr>
                   <tr>
                      <td>
-                        <button id = save onclick = "exportCanvas()"> Save File</button>
+                        <button id=save onclick="exportCanvas()"> Save File</button>
                      </td>
                      <td>
                         <button id=cancel onclick="hideExp()">Cancel</button>
@@ -232,7 +238,7 @@
                   </tr>
                   <tr>
                      <td>
-                        <button id = save onclick = "saveCanvas()"> Save File</button>
+                        <button id=save onclick="saveCanvas()"> Save File</button>
                      </td>
                      <td>
                         <button id=cancel onclick="hideSave()">Cancel</button>
@@ -258,9 +264,9 @@
 
    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
    <script src="/static/Socket.js"></script>
-   <script src="../static/ClientCanvas.js"></script>
-   <script src="../static/master.js"></script>
-   <script src="../static/colorjoe.min.js"></script>
+   <script src="/static/ClientCanvas.js"></script>
+   <script src="/static/master.js"></script>
+   <script src="/static/colorjoe.miren.js"></script>
    <script>
       // import syncColor from master.js
       class colorPicker
