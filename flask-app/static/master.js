@@ -30,6 +30,10 @@ input = document.getElementById( 'telture' );
 let lastX, lastY;
 
 
+window.addEventListener('onload', (event)=>{
+   
+})
+
 /*Drop Down Menu Start*/
 function showMenu ()
 {
@@ -303,10 +307,6 @@ function drawkill ( x, y, width, color )
       ctx.stroke();
    }
 
-   if ( brushType == 'pan' )
-   {
-      alert( 'Pan tool is not yet implemented' );
-   }
 }
 // End Brush
 
@@ -435,7 +435,6 @@ function setBrush ()
    {
       b.classList.add( 'active-brush' );
       e.classList.remove( 'active-brush' );
-      p.classList.remove( 'active-brush' );
    }
    brushType = 'brush';
 }
@@ -446,21 +445,10 @@ function setErase ()
    {
       b.classList.remove( 'active-brush' );
       e.classList.add( 'active-brush' );
-      p.classList.remove( 'active-brush' );
    }
    brushType = 'e';
 }
 
-function setPan ()
-{
-   if ( brushType != 'pan' )
-   {
-      b.classList.remove( 'active-brush' );
-      e.classList.remove( 'active-brush' );
-      p.classList.add( 'active-brush' );
-   }
-   brushType = 'pan';
-}
 function swapWidthHeight ()
 {
    const el1 = document.getElementById( 'width' );
