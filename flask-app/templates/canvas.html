@@ -252,6 +252,8 @@
    <script>
       window.localUserName = "{{ localUserName }}";
       window.gameId = "{{gameId}}"
+      window.drawingData = {{ drawingData|tojson if drawingData else 'null' }};
+
       window.SOCKET_EVENTS = {
          LOBBY_LIST: "{{ LOBBY_LIST }}",
          CREATE_LOBBY: "{{ CREATE_LOBBY }}",

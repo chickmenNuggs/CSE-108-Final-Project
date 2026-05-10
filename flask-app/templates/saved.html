@@ -21,29 +21,14 @@
         Saved Drawings
     </div>
 
-    <div class="login-container"
-         style="
-         width: 80%;
-         height: 80%;
-         overflow-y: auto;
-         flex-direction: column;
-         ">
+    <div class="login-container saved-container">
         <a class="home" href="{{url_for('home')}}"> Home</a>
         
         {% for drawing in drawings %}
 
-        <div style="
-            width: 90%;
-            background-color: #b00b5b;
-            padding: 20px;
-            margin: 10px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        ">
+        <div class="saved-card">
 
-            <div>
+            <div class="saved-content">
 
                 <h2 style="color:#ffc478;">
                     {{ drawing.drawing_name }}
@@ -51,14 +36,9 @@
 
                 <img
                     src="{{ drawing.image_data }}"
-                    width="250"
-                    style="
-                    border-radius: 10px;
-                    border: 3px solid #ffc478;
-                    background-color: white;
-                    "
-                >
-                <div style="margin-top:15px;">
+                    class="saved-preview">
+
+                <div class="saved-buttons">
 
                     <a
                         href="{{ url_for('load_drawing', id=drawing.id) }}"

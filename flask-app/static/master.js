@@ -30,9 +30,33 @@ input = document.getElementById( 'telture' );
 let lastX, lastY;
 
 
-window.addEventListener('onload', (event)=>{
-   
-})
+window.addEventListener('load', (event) =>
+{
+   console.log("Setting brush type");
+
+   brushType = 'brush';
+   syncColor();
+
+   if (window.drawingData)
+   {
+      create.classList.add('hidden');
+      canvas.classList.remove('hidden');
+
+      const img = new Image();
+
+      img.onload = function ()
+      {
+         canvas.width = img.width;
+         canvas.height = img.height;
+
+         ctx.drawImage(img, 0, 0);
+
+         isSaved = true;
+      };
+
+      img.src = window.drawingData;
+   }
+} );
 
 /*Drop Down Menu Start*/
 function showMenu ()
