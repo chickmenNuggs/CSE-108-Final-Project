@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify, redirect, render_template, request, url_for, session
 from flask_login import LoginManager, login_required, current_user
 from User import GetUserFromName
@@ -11,8 +13,11 @@ from saved import Saved
 from database import db
 
 app = Flask(__name__);
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
-app.config["SECRET_KEY"] = "your_secret_key"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    "DATABASE_URL",
+    "sqlite:///db.sqlite",
+)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "your_secret_key")
 
 db.init_app(app)
 socketio.init_app(app)
@@ -53,7 +58,10 @@ def login_post():
         print("SESSION USER:", session.get("user"))
         return redirect(url_for("home"))
 
-    return "Invalid login"
+    return render_template(
+        "login.html",
+        login_error="Invalid username or password. Please try again.",
+    )
 
 @app.route("/register/", methods=["POST"])
 def register():
@@ -239,4 +247,5 @@ with app.app_context():
 
 if __name__ == "__main__":
     print("[}----------- [Running app.py] ---------------{]")
-    socketio.run(app, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app, host="0.0.0.0", port=port, debug=True)

@@ -66,6 +66,18 @@
     font-size: x-large;
     color: #ffc478;
 }
+.login-error{
+    background-color: #ffc478;
+    border: 5px solid #c78f47;
+    border-radius: 10px;
+    color: #861149;
+    font-size: large;
+    font-weight: bold;
+    margin: 0 auto;
+    max-width: 90%;
+    padding: 10px;
+    text-align: center;
+}
 .home{
      display: inline-flex;
     justify-content: center;
@@ -126,6 +138,8 @@
     border-radius: 10px;   
     border-color: #c78f47; 
     color: #312515;
+    max-width: 90%;
+    padding: 4px 8px;
 }
 #login-button{
     text-decoration: none;
@@ -140,6 +154,11 @@
 #login-button:hover{
     background-color: #ffc478;
     border-color: #e4ac63;
+}
+#signup-link, #return{
+    display: inline-block;
+    margin-top: 6px;
+    text-decoration: underline;
 }
 
 

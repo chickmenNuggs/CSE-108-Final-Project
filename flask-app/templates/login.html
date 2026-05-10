@@ -6,6 +6,13 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="../static/master.css">
    <title>Drawing app</title>
+   {% if login_error %}
+   <script>
+      window.addEventListener("DOMContentLoaded", function () {
+         alert("{{ login_error }}");
+      });
+   </script>
+   {% endif %}
 </head>
 
 <body>
@@ -16,16 +23,23 @@
       <div class=login-container>
          <form action="{{ url_for('login_post') }}" method="POST">
             <table class="login-handler">
+               {% if login_error %}
+               <tr>
+                  <td>
+                     <p class="login-error" role="alert">{{ login_error }}</p>
+                  </td>
+               </tr>
+               {% endif %}
                <tr>
                   <td>
                      <label class="login-info">Username: </label>
-                     <input type="text" class="login-info" id="username" name="username">
+                     <input type="text" class="login-info" id="username" name="username" required>
                   </td>
                </tr>
                <tr>
                   <td>
                      <label class="login-info">Password: </label>
-                     <input type="password" class="login-info" id="password" name="password">
+                     <input type="password" class="login-info" id="password" name="password" required>
                   </td>
                </tr>
                <tr>

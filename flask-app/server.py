@@ -4,7 +4,7 @@ from flask import Flask, redirect, url_for, request
 import random
 import string
 
-socketio = SocketIO()
+socketio = SocketIO(async_mode="threading")
 # stores name and player count
 lobbies = {}
 # maps socket IDs to lobby/user info for disconnect cleanup
