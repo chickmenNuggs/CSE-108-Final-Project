@@ -131,7 +131,7 @@
                         Player Roster
                      </div>
                      <div id='r'>
-                        1/4
+                        <span id="player-count">{{PlayerCount}}/4</span>
                      </div>
                   </div>
                   <div id=ploingus>
@@ -140,25 +140,6 @@
                </div>
                <div class=chatbox>
                   <div class=responses id=chat>
-
-                     <div class=my-msg>
-                        <div id=sender> Host </div>
-                        <div id=msg>
-                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non
-                           impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem
-                           facere cum architecto tempora, consectetur neque.
-                        </div>
-                     </div>
-                     <div class=msg>
-                        <div id=sender> Other </div>
-                        <div id=msg>
-                           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum maxime distinctio aut non
-                           impedit, quisquam ratione exercitationem rem perferendis animi quos consequuntur enim, quidem
-                           facere cum architecto tempora, consectetur neque.
-                        </div>
-                     </div>
-
-
                   </div>
                   <div class=enter>
                      <input type="text" class='usermsg' id='telture'>
@@ -252,7 +233,7 @@
    <script>
       window.localUserName = "{{ localUserName }}";
       window.gameId = "{{gameId}}"
-      window.drawingData = {{ drawingData|tojson if drawingData else 'null' }};
+      window.drawingData = {{ drawingData | tojson if drawingData else 'null' }};
 
       window.SOCKET_EVENTS = {
          LOBBY_LIST: "{{ LOBBY_LIST }}",

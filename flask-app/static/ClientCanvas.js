@@ -144,9 +144,14 @@ function IsHost ( host )
    return window.localUserName === host;
 }
 
+const playerCountElement = document.getElementById( 'player-count' );
+
 function UpdatePlayerList ( players )
 {
    container.innerHTML = "";
+
+   playerCountElement.textContent = `${ players.length }/4`;
+
    players.forEach( player =>
    {
       fillRoster( player );
